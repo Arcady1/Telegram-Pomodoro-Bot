@@ -43,54 +43,29 @@ bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime(infoObject) {
   let currentDate = new Date();
-  let timeToW = infoObject.timeToWork;
-  let modInfoObj;
 
-  // если пришло время присылать уведомление
+  // если пришло время, присылать уведомление
   if ((currentDate.getHours() == infoObject.endDate.getHours()) && (currentDate.getMinutes() == infoObject.endDate.getMinutes())) {
-    if (timeToW == true) {
-      modInfoObj = changeInfoObj(infoObject, currentDate, timeToW);
-      infoObject = modInfoObj.infoObj;
-      curDate = modInfoObj.curDate;
-    } //
-    else {
-      modInfoObj = changeInfoObj(infoObject, currentDate, timeToW);
-      infoObject = modInfoObj.infoObj;
-      curDate = modInfoObj.curDate;
+    let word;
+
+    if (infoObject.timeToWork == true) {
+      infoObject.timeToWork = false;
+      infoObject.currentPlus = infoObject.note.workTime;
+      word = 'relax';
     }
+    // 
+    else {
+      infoObject.timeToWork = true;
+      infoObject.currentPlus = infoObject.note.relaxTime;
+      word = 'work';
+    }
+  
+    infoObject.startDate = currentDate;
+    infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
+    bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + infoObject.endDate.getMinutes());
   }
 
   setTimeout(checkCurTime, 1000, infoObject);
-}
-
-// ф-ия изменения объекта, содержащего информацию для уведомления и вывода сообщения
-function changeInfoObj(infoObject, currentDate, timeToW) {
-  let retObj, word;
-
-  if (timeToW == true) {
-    infoObject.timeToWork = false;
-    infoObject.currentPlus = infoObject.note.workTime;
-    infoObject.startDate = currentDate;
-    infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
-    word = 'relax';
-  }
-  // 
-  else {
-    infoObject.timeToWork = true;
-    infoObject.currentPlus = infoObject.note.relaxTime;
-    infoObject.startDate = currentDate;
-    infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
-    word = 'work';
-  }
-
-  bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + infoObject.endDate.getMinutes());
-
-  retObj = {
-    'infoObj': infoObject,
-    'curDate': currentDate
-  }
-
-  return retObj;
 }
 
 // ! Включить VPN
