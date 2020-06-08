@@ -46,7 +46,7 @@ function checkCurTime(infoObject) {
 
   // если пришло время, присылать уведомление
   if ((currentDate.getHours() == infoObject.endDate.getHours()) && (currentDate.getMinutes() == infoObject.endDate.getMinutes())) {
-    let word, minFormat;
+    let word;
 
     if (infoObject.timeToWork == true) {
       infoObject.timeToWork = false;
