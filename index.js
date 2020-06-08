@@ -7,7 +7,7 @@ const bot = new TelegramBot(token, {
 });
 
 // при написании сообщения боту запускается функция
-// минимум - 1 min
+// мин. - 1min, макс. - 23h 59min
 bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
   let userId = msg.from.id;
   let work = match[1];
@@ -36,7 +36,7 @@ bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
     'currentPlus': currentPlus
   }
 
-  bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + startDate.getMinutes() + "\n" + 'I will call you at ' + endDate.getHours() + ':' + endDate.getMinutes());
+  bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + minuteFormat(startDate.getMinutes()) + "\n" + 'I will call you at ' + endDate.getHours() + ':' + minuteFormat(endDate.getMinutes()));
   checkCurTime(infoObject);
 })
 
@@ -46,7 +46,7 @@ function checkCurTime(infoObject) {
 
   // если пришло время, присылать уведомление
   if ((currentDate.getHours() == infoObject.endDate.getHours()) && (currentDate.getMinutes() == infoObject.endDate.getMinutes())) {
-    let word;
+    let word, minFormat;
 
     if (infoObject.timeToWork == true) {
       infoObject.timeToWork = false;
@@ -59,18 +59,25 @@ function checkCurTime(infoObject) {
       infoObject.currentPlus = infoObject.note.relaxTime;
       word = 'work';
     }
-  
+
     infoObject.startDate = currentDate;
     infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
-    bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + infoObject.endDate.getMinutes());
+    bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
   }
 
   setTimeout(checkCurTime, 1000, infoObject);
 }
 
+// ф-ия дописывает ведущий 0 к минутам, если число состоит из одной цифры
+function minuteFormat(minute) {
+  if (Math.floor(minute / 10) == 0)
+    return '0' + minute;
+  else
+    return minute;
+}
+
 // ! Включить VPN
 // TODO: реагирование на некорректный ввод и вывод ПОДСКАЗКИ (как вводить, min - 1 мин, max - 23ч 59 мин)
-// TODO: если минуты - однозначное число, дописывать 0 (пр.: 12:1 -> 12:01)
 // TODO: Старт работы по кнопке И вывод            ПОДСКАЗКИ (ВЫНЕСТИ В Ф-ИЮ, ТК ПОВТОРЯЕТСЯ)
 // TODO: Кнопка для остановки бота
 // TODO: Перенести бота на сервер

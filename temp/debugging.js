@@ -5,7 +5,7 @@
 // newdate.setMinutes(date.getMinutes() + 50);
 // console.log("NEW: " + newdate.getHours() + ":" + newdate.getMinutes());
 
- (function () {
+(function () {
     // создание напоминания
     let note = {
         'usID': 'userId',
@@ -33,6 +33,15 @@
         'timeToWork': timeToWork,
         'currentPlus': currentPlus
     }
+
+    let min = startDate.getMinutes() - 45;
+    console.log('first: ' + min);
+
+    if (Math.floor(min / 10) == 0) {
+        console.log('yep');
+        min = '0' + min;
+    }
+    console.log('second: ' + min);
 
     console.log('It is: ' + startDate.getHours() + ':' + startDate.getMinutes() + ' now');
     console.log('I will call you at: ' + endDate.getHours() + ':' + endDate.getMinutes());
