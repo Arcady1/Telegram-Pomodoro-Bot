@@ -2,6 +2,7 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const debug = require('./helper'); // подключение модуля - помощника
 const myKeyboard = require('./keyboard'); // подключение созданной клавиатуры
+let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 
 const token = '1119527180:AAG0EODTNzz7WE0plnesGAayD02jNrq_kJE';
 const bot = new TelegramBot(token, {
@@ -24,9 +25,6 @@ bot.onText(/\/start/, msg => {
 // ф-ия реагирует на сообщение с клавиатуры
 bot.on('message', msg => {
   let userId = msg.from.id;
-  // ! ДЛЯ ОТЛАДКИ
-  bot.sendMessage(userId, debug(msg));
-  // !
 
   switch (msg.text) {
     case 'Start':
@@ -39,10 +37,6 @@ bot.on('message', msg => {
       // если введен интервал работа - отдых
       bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
         let userId = msg.from.id;
-        // ! ДЛЯ ОТЛАДКИ
-        // bot.sendMessage(userId, debug(msg));
-        bot.sendMessage(userId, debug(match));
-        // !
         let work = match[1];
         let relax = match[2];
 
@@ -74,6 +68,8 @@ bot.on('message', msg => {
       })
       break;
     case 'Stop':
+      // сброс таймера
+      clearTimeout(timerId);
       // появление клавиатуры
       bot.sendMessage(userId, 'You stopped', {
         reply_markup: {
@@ -82,7 +78,8 @@ bot.on('message', msg => {
       });
       break;
       // default:
-      // break;
+      //   bot.sendMessage(userId, 'Sorry, I don\'t understand you. RULES');
+      //   break;
   }
 })
 
@@ -111,7 +108,7 @@ function checkCurTime(infoObject) {
     bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
   }
 
-  setTimeout(checkCurTime, 1000, infoObject);
+  timerId = setTimeout(checkCurTime, 1000, infoObject);
 }
 
 // ф-ия дописывает ведущий 0 к минутам, если число состоит из одной цифры
@@ -124,7 +121,10 @@ function minuteFormat(minute) {
 
 // ! Включить VPN
 // TODO: реагирование на некорректный ввод и вывод ПОДСКАЗКИ (как вводить, min - 1 мин, max - 23ч 59 мин)
-// TODO: Старт работы по кнопке И вывод            ПОДСКАЗКИ (ВЫНЕСТИ В Ф-ИЮ, ТК ПОВТОРЯЕТСЯ)
 // TODO: Перенести бота на сервер
 // TODO: убрать элементы 'ДЛЯ ОТЛАДКИ'
 // ! Выключить VPN
+
+// ! ДЛЯ ОТЛАДКИ
+// bot.sendMessage(userId, debug(msg));
+// !
