@@ -7,8 +7,8 @@ const bot = new TelegramBot(token, {
 });
 
 // при написании сообщения боту запускается функция
-// bot.onText(/([0-9][0-9]) ([0-9][0-9])/, function (msg, match) {
-bot.onText(/([0-9]) ([0-9])/, function (msg, match) {
+// минимум - 1 min
+bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
   let userId = msg.from.id;
   let work = match[1];
   let relax = match[2];
@@ -36,40 +36,67 @@ bot.onText(/([0-9]) ([0-9])/, function (msg, match) {
     'currentPlus': currentPlus
   }
 
-  bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + startDate.getMinutes());
-  bot.sendMessage(note.usID, 'I will call you at ' + endDate.getHours() + ':' + endDate.getMinutes());
-
+  bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + startDate.getMinutes() + "\n" + 'I will call you at ' + endDate.getHours() + ':' + endDate.getMinutes());
   checkCurTime(infoObject);
 })
 
+// ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime(infoObject) {
   let currentDate = new Date();
+  let timeToW = infoObject.timeToWork;
+  let modInfoObj;
 
   // если пришло время присылать уведомление
   if ((currentDate.getHours() == infoObject.endDate.getHours()) && (currentDate.getMinutes() == infoObject.endDate.getMinutes())) {
-    if (infoObject.timeToWork == true) {
-      bot.sendMessage(infoObject.note.usID, 'It\'s time to relax!');
-      infoObject.timeToWork = false;
-      infoObject.currentPlus = infoObject.note.relaxTime;
-    }
-    // 
+    if (timeToW == true) {
+      modInfoObj = changeInfoObj(infoObject, currentDate, timeToW);
+      infoObject = modInfoObj.infoObj;
+      curDate = modInfoObj.curDate;
+    } //
     else {
-      bot.sendMessage(infoObject.note.usID, 'It\'s time to work!');
-      infoObject.timeToWork = true;
-      infoObject.currentPlus = infoObject.note.workTime;
+      modInfoObj = changeInfoObj(infoObject, currentDate, timeToW);
+      infoObject = modInfoObj.infoObj;
+      curDate = modInfoObj.curDate;
     }
-
-    infoObject.startDate = currentDate;
-    infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
-    bot.sendMessage(infoObject.note.usID, 'I will call you at ' + infoObject.endDate.getHours() + ':' + infoObject.endDate.getMinutes());
   }
 
   setTimeout(checkCurTime, 1000, infoObject);
 }
 
+// ф-ия изменения объекта, содержащего информацию для уведомления и вывода сообщения
+function changeInfoObj(infoObject, currentDate, timeToW) {
+  let retObj, word;
+
+  if (timeToW == true) {
+    infoObject.timeToWork = false;
+    infoObject.currentPlus = infoObject.note.workTime;
+    infoObject.startDate = currentDate;
+    infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
+    word = 'relax';
+  }
+  // 
+  else {
+    infoObject.timeToWork = true;
+    infoObject.currentPlus = infoObject.note.relaxTime;
+    infoObject.startDate = currentDate;
+    infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
+    word = 'work';
+  }
+
+  bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + infoObject.endDate.getMinutes());
+
+  retObj = {
+    'infoObj': infoObject,
+    'curDate': currentDate
+  }
+
+  return retObj;
+}
+
 // ! Включить VPN
-// TODO: проверка ввода на корректность (регулярное выражение) + реагирование на некорректный ввод
-// TODO: Старт работы по кнопке
+// TODO: реагирование на некорректный ввод и вывод ПОДСКАЗКИ (как вводить, min - 1 мин, max - 23ч 59 мин)
+// TODO: если минуты - однозначное число, дописывать 0 (пр.: 12:1 -> 12:01)
+// TODO: Старт работы по кнопке И вывод            ПОДСКАЗКИ (ВЫНЕСТИ В Ф-ИЮ, ТК ПОВТОРЯЕТСЯ)
 // TODO: Кнопка для остановки бота
 // TODO: Перенести бота на сервер
 // ! Выключить VPN
