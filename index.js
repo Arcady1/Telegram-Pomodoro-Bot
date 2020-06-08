@@ -10,6 +10,10 @@ const bot = new TelegramBot(token, {
 // мин. - 1min, макс. - 23h 59min
 bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
   let userId = msg.from.id;
+  // ! ДЛЯ ОТЛАДКИ
+  // bot.sendMessage(userId, debug(msg));
+  // bot.sendMessage(userId, debug(match));
+  // !
   let work = match[1];
   let relax = match[2];
 
@@ -38,6 +42,38 @@ bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
 
   bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + minuteFormat(startDate.getMinutes()) + "\n" + 'I will call you at ' + endDate.getHours() + ':' + minuteFormat(endDate.getMinutes()));
   checkCurTime(infoObject);
+})
+
+// реагирует на сообщение с клавиатуры
+bot.on('message', msg => {
+  let userId = msg.from.id;
+  // реагирование на нажатие клавиш клавиатуры, отправленной ботом
+  switch (msg.text) {
+    case 'Start':
+      bot.sendMessage(userId, 'You started');
+      break;
+    case 'Stop':
+      bot.sendMessage(userId, 'You stoped');
+      break;
+    default:
+      break;
+  }
+})
+
+// при старте бота
+bot.onText(/\/start/, msg => {
+  let userId = msg.from.id;
+  let textWelcome = 'Hello! WRITE HERE, WHAT DOES THIS BOT DO';
+
+  // появление клавиатуры
+  bot.sendMessage(userId, textWelcome, {
+    reply_markup: {
+      keyboard: [
+        ['Start'],
+        ['Stop']
+      ]
+    }
+  });
 })
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
@@ -81,4 +117,12 @@ function minuteFormat(minute) {
 // TODO: Старт работы по кнопке И вывод            ПОДСКАЗКИ (ВЫНЕСТИ В Ф-ИЮ, ТК ПОВТОРЯЕТСЯ)
 // TODO: Кнопка для остановки бота
 // TODO: Перенести бота на сервер
+// TODO: убрать элементы 'ДЛЯ ОТЛАДКИ'
 // ! Выключить VPN
+
+// ! ДЛЯ ОТЛАДКИ
+function debug(obj) {
+  obj = JSON.stringify(obj, null, 4);
+  return obj;
+}
+// !
