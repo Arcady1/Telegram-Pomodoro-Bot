@@ -9,7 +9,12 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8848;
 
-app.listen(port, () => {
+let http = require('http');
+let server = http.Server(app);
+
+app.use(express.static('client'));
+
+server.listen(port, () => {
   console.log(`url-shortener listening on port ${port}!`)
 });
 // ? ===============================================
