@@ -23,63 +23,63 @@ bot.onText(/\/start/, msg => {
 })
 
 // ф-ия реагирует на сообщение с клавиатуры
-bot.on('message', msg => {
-  let userId = msg.from.id;
+bot.onText(/(.+)+/, (msg, match) => {
+  let userId = msg.from.id; // id отправителя сообщения 
+  let userText = msg.text; // текст отправителя 
+  let expectInput = /([1-9][0-9]*) ([1-9][0-9]*)/; // ожидаемый интервал работы - отдыха
+  // если ввели Start
+  if (userText == 'Start') {
+    // сброс таймера
+    clearTimeout(timerId);
+    // появление клавиатуры
+    bot.sendMessage(userId, 'RULES', {
+      reply_markup: {
+        keyboard: myKeyboard.stopKb
+      }
+    });
+  }
+  // 
+  else if (expectInput.test(userText)) {
+    // если введен интервал работа - отдых
+    let work = match[1];
+    let relax = match[2];
 
-  switch (msg.text) {
-    case 'Start':
-      // появление клавиатуры
-      bot.sendMessage(userId, 'RULES', {
-        reply_markup: {
-          keyboard: myKeyboard.stopKb
-        }
-      });
-      // если введен интервал работа - отдых
-      bot.onText(/([1-9][0-9]*) ([1-9][0-9]*)/, function (msg, match) {
-        let userId = msg.from.id;
-        let work = match[1];
-        let relax = match[2];
+    // создание напоминания
+    let note = {
+      'usID': userId,
+      'workTime': parseInt(work),
+      'relaxTime': parseInt(relax)
+    }
 
-        // создание напоминания
-        let note = {
-          'usID': userId,
-          'workTime': parseInt(work),
-          'relaxTime': parseInt(relax)
-        }
+    let startDate = new Date(); // начальная дата
+    let endDate = new Date(); // дата уведомления
+    let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)
+    let timeToWork = true;
 
-        let startDate = new Date(); // начальная дата
-        let endDate = new Date(); // дата уведомления
-        let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)
-        let timeToWork = true;
+    currentPlus = note.workTime; // значение по умолчанию - длительность рабочего цикла
+    endDate.setMinutes(startDate.getMinutes() + currentPlus); // установка конечной даты
+    // объект, содержащий информацию для уведомления
+    let infoObject = {
+      'note': note,
+      'startDate': startDate,
+      'endDate': endDate,
+      'timeToWork': timeToWork,
+      'currentPlus': currentPlus
+    }
 
-        currentPlus = note.workTime; // значение по умолчанию - длительность рабочего цикла
-        endDate.setMinutes(startDate.getMinutes() + currentPlus); // установка конечной даты
-        // объект, содержащий информацию для уведомления
-        let infoObject = {
-          'note': note,
-          'startDate': startDate,
-          'endDate': endDate,
-          'timeToWork': timeToWork,
-          'currentPlus': currentPlus
-        }
-
-        bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + minuteFormat(startDate.getMinutes()) + "\n" + 'I will call you at ' + endDate.getHours() + ':' + minuteFormat(endDate.getMinutes()));
-        checkCurTime(infoObject);
-      })
-      break;
-    case 'Stop':
-      // сброс таймера
-      clearTimeout(timerId);
-      // появление клавиатуры
-      bot.sendMessage(userId, 'You stopped', {
-        reply_markup: {
-          keyboard: myKeyboard.startKb
-        }
-      });
-      break;
-      // default:
-      //   bot.sendMessage(userId, 'Sorry, I don\'t understand you. RULES');
-      //   break;
+    bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + minuteFormat(startDate.getMinutes()) + "\n" + 'I will call you at ' + endDate.getHours() + ':' + minuteFormat(endDate.getMinutes()));
+    checkCurTime(infoObject);
+  }
+  // если ввели Stop
+  else if (userText == 'Stop') {
+    // сброс таймера
+    clearTimeout(timerId);
+    // появление клавиатуры
+    bot.sendMessage(userId, 'You stopped', {
+      reply_markup: {
+        keyboard: myKeyboard.startKb
+      }
+    });
   }
 })
 
@@ -121,10 +121,7 @@ function minuteFormat(minute) {
 
 // ! Включить VPN
 // TODO: реагирование на некорректный ввод и вывод ПОДСКАЗКИ (как вводить, min - 1 мин, max - 23ч 59 мин)
+// TODO: убрать модуль - помощник
 // TODO: Перенести бота на сервер
 // TODO: убрать элементы 'ДЛЯ ОТЛАДКИ'
 // ! Выключить VPN
-
-// ! ДЛЯ ОТЛАДКИ
-// bot.sendMessage(userId, debug(msg));
-// !
