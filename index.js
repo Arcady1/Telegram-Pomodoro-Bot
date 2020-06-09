@@ -1,7 +1,7 @@
 process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
-const debug = require('./helper'); // подключение модуля - помощника
-const myKeyboard = require('./keyboard'); // подключение созданной клавиатуры
+const myKeyboard = require('./keyboard'); // модуль с клавиатурой
+const messages = require('./messages'); // модуль с уведомлениями
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 
 const token = '1119527180:AAG0EODTNzz7WE0plnesGAayD02jNrq_kJE';
@@ -13,33 +13,33 @@ const bot = new TelegramBot(token, {
 bot.onText(/\/start/, msg => {
   let userId = msg.from.id;
   // появление клавиатуры
-  bot.sendMessage(userId, '' + fullRules('firstStart', 'Hello!\n'), {
+  bot.sendMessage(userId, '' + messages.fullRules('firstStart', ('Hello, ' + msg.from.first_name + '!\n')), {
     reply_markup: {
       keyboard: myKeyboard.startKb
     }
   });
 })
-// ф-ия реагирует на сообщения Start / Stop / интервал
-bot.onText(/(.+)+/, (msg, match) => {
+// при вводе Start / Stop / интервал
+bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
   let userId = msg.from.id; // id отправителя сообщения 
   let userText = msg.text; // текст отправителя 
-  let expectInput = /([1-9][0-9]*) ([1-9][0-9]*)/; // ожидаемый интервал работы - отдыха
-  // если ввели Start
-  if (userText == 'Start') {
+  let expectInput = /(\d\d*)(\s)*(\d\d*)/; // ожидаемый интервал работы - отдыха 
+
+  if (userText == 'START') {
     // сброс таймера
     clearTimeout(timerId);
     // появление клавиатуры
-    bot.sendMessage(userId, fullRules('butStart'), {
+    bot.sendMessage(userId, messages.fullRules('butStart'), {
       reply_markup: {
         keyboard: myKeyboard.stopKb
       }
     });
   }
   // если введен интервал работы - отдыха
-  else if (expectInput.test(userText)) {
+  else if (expectInput.test(match[0])) {
     // если введен интервал работа - отдых
     let work = match[1];
-    let relax = match[2];
+    let relax = match[3];
 
     // создание напоминания
     let note = {
@@ -67,35 +67,26 @@ bot.onText(/(.+)+/, (msg, match) => {
     bot.sendMessage(note.usID, 'It is ' + startDate.getHours() + ':' + minuteFormat(startDate.getMinutes()) + "\n" + 'I will call you at ' + endDate.getHours() + ':' + minuteFormat(endDate.getMinutes()));
     checkCurTime(infoObject);
   }
-  // если ввели Stop
-  else if (userText == 'Stop') {
+  // если ввели STOP
+  else if (userText == 'STOP') {
     // сброс таймера
     clearTimeout(timerId);
     // появление клавиатуры
-    bot.sendMessage(userId, fullRules('butStop'), {
+    bot.sendMessage(userId, messages.fullRules('butStop'), {
       reply_markup: {
         keyboard: myKeyboard.startKb
       }
     });
   }
+  // если ввели /help
+  else if (userText == '/help') {
+    bot.sendMessage(userId, messages.fullRules('butHelp'));
+  }
+  // если команды не существует и не является /start
+  else if (userText != '/start') {
+    bot.sendMessage(userId, 'Sorry, I don\'t understand you.\nSend me \/help to help you');
+  }
 })
-
-// TODO ф-ия реагирует на некорректный ввод: выводит правила
-
-// руководство; ф-ия принимает заголовок (optional) и тип руководства (firstStart / butStart / butStop), возвращает текст руководства
-function fullRules(typeOfRule, title = '') {
-  let rulText;
-
-  if (typeOfRule == 'firstStart')
-    rulText = 'WHAT DOES THIS BOT DO\n AND HOW TO WORK WITH IT\nPress Start';
-
-  else if (typeOfRule == 'butStart')
-    rulText = 'HOW TO BEGIN: WHAT TO WRITE';
-  else if (typeOfRule == 'butStop')
-    rulText = 'PRESS START TO BEGIN';
-
-  return (title + rulText);
-}
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime(infoObject) {
@@ -107,13 +98,13 @@ function checkCurTime(infoObject) {
 
     if (infoObject.timeToWork == true) {
       infoObject.timeToWork = false;
-      infoObject.currentPlus = infoObject.note.workTime;
+      infoObject.currentPlus = infoObject.note.relaxTime;
       word = 'relax';
     }
     // 
     else {
       infoObject.timeToWork = true;
-      infoObject.currentPlus = infoObject.note.relaxTime;
+      infoObject.currentPlus = infoObject.note.workTime;
       word = 'work';
     }
 
@@ -131,10 +122,3 @@ function minuteFormat(minute) {
   else
     return minute;
 }
-
-// ! Включить VPN
-// TODO: реагирование на некорректный ввод и вывод ПОДСКАЗКИ (как вводить, min - 1 мин, max - 23ч 59 мин)
-// TODO: убрать модуль - помощник
-// TODO: Перенести бота на сервер
-// TODO: убрать элементы 'ДЛЯ ОТЛАДКИ'
-// ! Выключить VPN

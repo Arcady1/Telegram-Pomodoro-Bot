@@ -1,8 +1,8 @@
 module.exports = {
     startKb: [
-        ['Start']
+        ['START']
     ],
     stopKb: [
-        ['Stop']
+        ['STOP']
     ]
 }
