@@ -7,7 +7,7 @@ const config = require('./project_modules/config'); // модуль с конф�
 // ? ===============================================
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 8848;
+const port = process.env.PORT || 5000;
 
 let http = require('http');
 let server = http.Server(app);
