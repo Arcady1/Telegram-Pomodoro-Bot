@@ -20,7 +20,7 @@ bot.onText(/\/start/, msg => {
     }
   });
 })
-// при вводе Start / Stop / интервал
+// при вводе Start / Stop / интервал / /help
 bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
   let userId = msg.from.id; // id отправителя сообщения 
   let userText = msg.text; // текст отправителя 
