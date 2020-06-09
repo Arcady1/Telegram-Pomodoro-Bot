@@ -12,17 +12,14 @@ const bot = new TelegramBot(token, {
 // при старте бота
 bot.onText(/\/start/, msg => {
   let userId = msg.from.id;
-  let textWelcome = 'Hello! WRITE HERE, WHAT DOES THIS BOT DO AND RULES';
-
   // появление клавиатуры
-  bot.sendMessage(userId, textWelcome, {
+  bot.sendMessage(userId, '' + fullRules('firstStart', 'Hello!\n'), {
     reply_markup: {
       keyboard: myKeyboard.startKb
     }
   });
 })
-
-// ф-ия реагирует на сообщение с клавиатуры
+// ф-ия реагирует на сообщения Start / Stop / интервал
 bot.onText(/(.+)+/, (msg, match) => {
   let userId = msg.from.id; // id отправителя сообщения 
   let userText = msg.text; // текст отправителя 
@@ -32,13 +29,13 @@ bot.onText(/(.+)+/, (msg, match) => {
     // сброс таймера
     clearTimeout(timerId);
     // появление клавиатуры
-    bot.sendMessage(userId, 'RULES', {
+    bot.sendMessage(userId, fullRules('butStart'), {
       reply_markup: {
         keyboard: myKeyboard.stopKb
       }
     });
   }
-  // 
+  // если введен интервал работы - отдыха
   else if (expectInput.test(userText)) {
     // если введен интервал работа - отдых
     let work = match[1];
@@ -75,13 +72,30 @@ bot.onText(/(.+)+/, (msg, match) => {
     // сброс таймера
     clearTimeout(timerId);
     // появление клавиатуры
-    bot.sendMessage(userId, 'You stopped', {
+    bot.sendMessage(userId, fullRules('butStop'), {
       reply_markup: {
         keyboard: myKeyboard.startKb
       }
     });
   }
 })
+
+// TODO ф-ия реагирует на некорректный ввод: выводит правила
+
+// руководство; ф-ия принимает заголовок (optional) и тип руководства (firstStart / butStart / butStop), возвращает текст руководства
+function fullRules(typeOfRule, title = '') {
+  let rulText;
+
+  if (typeOfRule == 'firstStart')
+    rulText = 'WHAT DOES THIS BOT DO\n AND HOW TO WORK WITH IT\nPress Start';
+
+  else if (typeOfRule == 'butStart')
+    rulText = 'HOW TO BEGIN: WHAT TO WRITE';
+  else if (typeOfRule == 'butStop')
+    rulText = 'PRESS START TO BEGIN';
+
+  return (title + rulText);
+}
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime(infoObject) {
@@ -110,7 +124,6 @@ function checkCurTime(infoObject) {
 
   timerId = setTimeout(checkCurTime, 1000, infoObject);
 }
-
 // ф-ия дописывает ведущий 0 к минутам, если число состоит из одной цифры
 function minuteFormat(minute) {
   if (Math.floor(minute / 10) == 0)
