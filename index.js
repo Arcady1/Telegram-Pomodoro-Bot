@@ -7,10 +7,11 @@ const config = require('./project_modules/config'); // модуль с конф�
 // ? ===============================================
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 80;
-app.listen(PORT, () => {
-  console.log('Server has been started');
-})
+const port = 3000;
+
+app.listen(port, () => {
+  console.log(`url-shortener listening on port ${port}!`)
+});
 // ? ===============================================
 
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
