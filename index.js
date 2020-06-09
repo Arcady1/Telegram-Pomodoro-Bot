@@ -1,8 +1,8 @@
 process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
-const myKeyboard = require('./keyboard'); // модуль с клавиатурой
-const messages = require('./messages'); // модуль с уведомлениями
-const config = require('./config'); // модуль с конфигурацией проекта
+const myKeyboard = require('./project_modules/keyboard'); // модуль с клавиатурой
+const messages = require('./project_modules/messages'); // модуль с уведомлениями
+const config = require('./project_modules/config'); // модуль с конфигурацией проекта
 
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 const token = config.TOKEN(); // TOKEN бота
