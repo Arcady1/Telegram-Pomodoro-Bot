@@ -7,14 +7,9 @@ const config = require('./project_modules/config'); // модуль с конф�
 // ? ===============================================
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
-let http = require('http');
-let server = http.Server(app);
-
-app.use(express.static('client'));
-
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`url-shortener listening on port ${port}!`)
 });
 // ? ===============================================
