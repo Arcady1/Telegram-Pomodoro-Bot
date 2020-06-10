@@ -25,9 +25,18 @@ Telegram bot 52/17 регулярно напоминанет, когда нуж�
 `npm i`  
 Запускаем бота:  
 `npm run start`  
-Если через несколько секунд появляется ошибка 
+Если через несколько секунд появляется ошибка ` {"code":"ETELEGRAM","message":"ETELEGRAM: 409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running"}`, значит, ваш бот уже работает. Просто нажмите Ctrl + C.  
+Чтобы удостовериться в работоспособности бота, заходим в профиль, находим *Recent Projects* и кликаем на проект.  
+После чего вы увидите окошко с надпись *Started*. Пока оно активно, бот работает. В противном случае он отключится через 5 мин. Подробнее можно прочитать [по этой ссылке][3].  
+
+## Будет полезно
+[nvm-sh/nvm][4]  
+[Telegram bot on JavaScript with free hosting][5]  
 
 
 
-[1]: https://t.me/X_52_17_bot "bot"
-[2]: https://glitch.com/ "Glitch"
+[1]: https://t.me/X_52_17_bot                                                             "bot"
+[2]: https://glitch.com/                                                                  "Glitch"
+[3]: https://glitch.com/help/restrictions/                                                "timing-Glitch"
+[4]: https://github.com/nvm-sh/nvm                                                        "nvm"
+[5]: https://medium.com/roomjs/telegram-bot-on-javascript-with-free-hosting-53ae01bce991  "medium"
