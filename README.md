@@ -10,13 +10,12 @@ Telegram bot 52/17 регулярно напоминанет, когда нуж�
 2. Создаем новый проект *NewProject*
 3. Нажимаем *Import from GitHub* и прописываем путь к репозиторию 
 4. В левом нижнем углу нажимаем *Tools*, *Terminal* и пишем следующие команды:  
-`	apt-get update  
-	apt-get install git -su`  
-  В качестве проверки вводим команду `git`. Ошибок быть не должно  
-  `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash  
-	export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+`apt-get update`  
+`apt-get install git -su`  
+В качестве проверки вводим команду `git`. Ошибок быть не должно  
+`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash`  
+`export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"`  
+`[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"`  
 	nvm					// для проверки
 	nvm install <version>			// ставить ту версию, которая использовалась при разоаботке проекта. Чтобы узнать, ввести в терминале СВОЕГО ПК: node -v
 	nvm use <version>			// указать ту же версию, что и выше
