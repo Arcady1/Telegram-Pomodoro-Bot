@@ -4,16 +4,6 @@ const myKeyboard = require('./project_modules/keyboard'); // модуль с к�
 const messages = require('./project_modules/messages'); // модуль с уведомлениями
 const config = require('./project_modules/config'); // модуль с конфигурацией проекта
 
-// ? ===============================================
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
-
-app.listen(port, () => {
-  console.log(`url-shortener listening on port ${port}!`)
-});
-// ? ===============================================
-
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 const token = config.TOKEN(); // TOKEN бота
 const bot = new TelegramBot(token, {
