@@ -1,5 +1,4 @@
-# Telegram bot 52/17
-[This_bot][1]
+# [Telegram bot 52/17][1]
 
 [1]: https://t.me/X_52_17_bot "bot"
 
