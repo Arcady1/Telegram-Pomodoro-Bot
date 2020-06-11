@@ -22,8 +22,6 @@ function botAnswers(commandText, optional_text = '') {
     return ('On pause.\n\nTime left: ' + optional_text);
   if (commandText == 'butHelp')
     return ('Available commands:\n\n\/start - restart the bot\nSTART - select a new interval\nSTOP - stop working\nPAUSE - pause the bot. After restarting it\'ll continue working');
-  if (commandText == 'butResume')
-    return ('I\'m working again.\n\nIT IS: ...\nI WILL...(УЖЕ ЕСТЬ В ДРУГОЙ Ф-ИИ');
 
   return commandText;
 }

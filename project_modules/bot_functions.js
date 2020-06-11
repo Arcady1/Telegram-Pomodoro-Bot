@@ -3,26 +3,35 @@ const myKeyboard = require('./keyboard'); // модуль с клавиатур�
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 let infoObject; // объект, содержащий информацию для уведомления
 
-function timeLeft() {
+function timeLeft(needMin = false) {
     let currentDate = new Date();
     let remains = infoObject.endDate - currentDate; // остаток в мс (от текущего момента до конца)
-    let hours = remains / (60 * 60 * 1000);
-    let minutes = remains / (60 * 1000);
+    let hours = parseInt(remains / (1000 * 60 * 60));
+    let minutes = parseInt((remains / (1000 * 60)) - (hours * 60));
 
-    if (parseInt(hours) == 0)
-        return (parseInt(minutes) + 'min');
+    if (needMin == true)
+        return minutes;
+
+    if (hours == 0)
+        return (minutes + 'min');
     else
-        return (parseInt(hours) + 'h ' + parseInt(minutes) + 'min');
+        return (hours + 'h ' + minutes + 'min');
 }
 
 // отсчет времени при передаче боту двух чисел 
-function countdown(bot, note) {
+function countdown(bot, note, pauseTimeLeft = 0) {
     let startDate = new Date(); // начальная дата
     let endDate = new Date(); // дата уведомления
     let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)
     let timeToWork = true;
 
-    currentPlus = note.workTime; // значение по умолчанию - длительность рабочего цикла
+    // значение по умолчанию - длительность рабочего цикла
+    if (pauseTimeLeft == 0)
+        currentPlus = note.workTime;
+    // если была нажата пауза
+    else
+        currentPlus = pauseTimeLeft;
+
     endDate.setMinutes(startDate.getMinutes() + currentPlus); // установка конечной даты
 
     infoObject = {
@@ -32,9 +41,6 @@ function countdown(bot, note) {
         'timeToWork': timeToWork,
         'currentPlus': currentPlus
     }
-
-    // ! при вызове из Resume startDate меняется на текущее время; endDate увеличивается на Time left 
-
     // появление клавиатуры
     let noteTxt = 'It is ' + startDate.getHours() + ':' + minuteFormat(startDate.getMinutes()) + "\n" + 'I will call you at ' + endDate.getHours() + ':' + minuteFormat(endDate.getMinutes());
     bot.sendMessage(note.usID, noteTxt, {

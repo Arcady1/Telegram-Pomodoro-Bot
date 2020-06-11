@@ -80,12 +80,12 @@ bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
   // RESUME
   else if (userText == 'RESUME') {
     // появление кнопки PAUSE
-    bot.sendMessage(userId, messages.botAnswers('butResume', botFunctions.timeLeft()), {
+    bot.sendMessage(userId, 'I\'m working again', {
       reply_markup: {
         keyboard: myKeyboard.stopKb
       }
     });
-    // ?
+    botFunctions.countdown(bot, note, botFunctions.timeLeft(true)); // последний аргумент - оставшееся время до уведомления (в min) 
   }
   // /help
   else if (userText == '/help') {
