@@ -5,12 +5,11 @@ const messages = require('./project_modules/messages'); // модуль с ув�
 const config = require('./project_modules/config'); // модуль с конфигурацией проекта 
 const botFunctions = require('./project_modules/bot_functions'); // модуль с функциями и методами бота 
 
-const token = config.TOKEN(); // TOKEN бота
+const token = config.TOKEN; // TOKEN бота
 const bot = new TelegramBot(token, {
   polling: true
 });
 messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
-let note; // !
 
 // при старте бота
 bot.onText(/\/start/, msg => {
@@ -28,7 +27,14 @@ bot.onText(/\/start/, msg => {
 bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
   let userId = msg.from.id; // id отправителя сообщения 
   let userText = msg.text; // текст отправителя 
-  let expectInput = /(\d\d*)(\s)*(\d\d*)/; // ожидаемый интервал работы - отдыха 
+  let expectInput = /(\d\d*)(\s)*(\d\d*)/; // ожидаемые интервалы работы / отдыха; хранятся в match[1] и match[3] 
+  let work = match[1];
+  let relax = match[3];
+  let note = {
+    'usID': userId,
+    'workTime': parseInt(work),
+    'relaxTime': parseInt(relax)
+  }
 
   if (userText == 'START') {
     // сброс таймера
@@ -44,15 +50,7 @@ bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
   else if (expectInput.test(match[0])) {
     // сброс таймера, чтобы интервалы не накладывались 
     botFunctions.clrTimeout();
-
-    let work = match[1];
-    let relax = match[3];
-    note = {
-      'usID': userId,
-      'workTime': parseInt(work),
-      'relaxTime': parseInt(relax)
-    }
-
+    // отсчет до уведомления
     botFunctions.countdown(bot, note);
   }
   // STOP
@@ -84,8 +82,9 @@ bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
       reply_markup: {
         keyboard: myKeyboard.stopKb
       }
-    });
-    botFunctions.countdown(bot, note, botFunctions.timeLeft(true)); // последний аргумент - оставшееся время до уведомления (в min) 
+    }).then(() => {
+      botFunctions.countdown(bot, note, botFunctions.timeLeft(true)); // последний аргумент - оставшееся время до уведомления (в min) 
+    })
   }
   // /help
   else if (userText == '/help') {

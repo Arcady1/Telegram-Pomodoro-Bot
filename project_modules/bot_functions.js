@@ -3,15 +3,15 @@ const myKeyboard = require('./keyboard'); // модуль с клавиатур�
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 let infoObject; // объект, содержащий информацию для уведомления
 
+// ф-ия подсчета и вывода времени, оставшегося после нажатия кнопки паузы
 function timeLeft(needMin = false) {
     let currentDate = new Date();
     let remains = infoObject.endDate - currentDate; // остаток в мс (от текущего момента до конца)
     let hours = parseInt(remains / (1000 * 60 * 60));
-    let minutes = parseInt((remains / (1000 * 60)) - (hours * 60));
+    let minutes = parseInt((remains / (1000 * 60)) - (hours * 60)) + 1;
 
     if (needMin == true)
         return minutes;
-
     if (hours == 0)
         return (minutes + 'min');
     else
@@ -28,7 +28,7 @@ function countdown(bot, note, pauseTimeLeft = 0) {
     // значение по умолчанию - длительность рабочего цикла
     if (pauseTimeLeft == 0)
         currentPlus = note.workTime;
-    // если была нажата пауза
+    // если была нажата кнопка паузы
     else
         currentPlus = pauseTimeLeft;
 
@@ -42,13 +42,12 @@ function countdown(bot, note, pauseTimeLeft = 0) {
         'currentPlus': currentPlus
     }
     // появление клавиатуры
-    let noteTxt = 'It is ' + startDate.getHours() + ':' + minuteFormat(startDate.getMinutes()) + "\n" + 'I will call you at ' + endDate.getHours() + ':' + minuteFormat(endDate.getMinutes());
+    let noteTxt = 'It is ' + infoObject.startDate.getHours() + ':' + minuteFormat(infoObject.startDate.getMinutes()) + "\n" + 'I will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes());
     bot.sendMessage(note.usID, noteTxt, {
         reply_markup: {
             keyboard: myKeyboard.stopKb
         }
     });
-
     checkCurTime(infoObject);
 }
 
@@ -71,9 +70,7 @@ function checkCurTime(infoObject) {
             infoObject.timeToWork = false;
             infoObject.currentPlus = infoObject.note.relaxTime;
             word = 'relax';
-        }
-        // 
-        else {
+        } else {
             infoObject.timeToWork = true;
             infoObject.currentPlus = infoObject.note.workTime;
             word = 'work';
@@ -83,8 +80,7 @@ function checkCurTime(infoObject) {
         infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
         messages.botSendMyMessage('It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
     }
-
-    timerId = setTimeout(checkCurTime, 1000, infoObject);
+    timerId = setTimeout(checkCurTime, 2000, infoObject);
 }
 
 function clrTimeout() {

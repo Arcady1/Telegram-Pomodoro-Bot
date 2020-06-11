@@ -1,16 +1,14 @@
-// ! ОТПРАВКА СООБЩЕНИЙ ОТ БОТА
 let bot;
 let userID;
 // установка бота, чтобы отправлять сообщения из этого модуля
 function setBot(mainBot) {
   bot = mainBot;
 }
-// !
 function setUserID(user_id) {
   userID = user_id;
 }
 
-// ! руководство; ф-ия принимает заголовок (optional) и тип руководства (firstStart / butStart / butStop / butHelp / butPause), возвращает текст руководства
+// ф-ия принимает текст сообщения и возвращает строку  
 function botAnswers(commandText, optional_text = '') {
   if (commandText == 'firstStart')
     return ('This bot will write you, when you have to work and relax.\nPress START to begin.');
