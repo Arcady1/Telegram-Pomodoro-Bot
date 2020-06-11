@@ -2,8 +2,14 @@ module.exports = {
     startKb: [
         ['START']
     ],
-    stopKb: [
+    intervalsKb: [
+        ['25 5', '50 10', '52 17']
+    ],
+    pauseKb: [
         ['25 5', '50 10', '52 17'],
+        ['RESUME', 'STOP']
+    ],
+    stopKb: [
         ['PAUSE', 'STOP']
     ]
 }
