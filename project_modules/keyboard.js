@@ -3,6 +3,7 @@ module.exports = {
         ['START']
     ],
     stopKb: [
-        ['STOP']
+        ['25 5', '50 10', '52 17'],
+        ['PAUSE', 'STOP']
     ]
 }

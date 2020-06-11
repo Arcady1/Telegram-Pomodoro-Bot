@@ -38,7 +38,7 @@ bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
   }
   // если введен интервал работы - отдыха
   else if (expectInput.test(match[0])) {
-    // если введен интервал работа - отдых
+    clearTimeout(timerId); // сброс таймера чтобы не установилось сразу два
     let work = match[1];
     let relax = match[3];
 
