@@ -11,6 +11,10 @@ module.exports = {
         ['RESUME', 'STOP']
     ],
     stopKb: [
-        ['PAUSE', 'STOP']
+        ['PAUSE', 'STOP'],
+        ['WRONG TIME']
+    ],
+    stopOnlyKb: [
+        ['STOP']
     ]
 }

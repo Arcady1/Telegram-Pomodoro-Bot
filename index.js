@@ -13,8 +13,7 @@ messages.setBot(bot); // добавляем bot в модуль messages, что
 
 // при старте бота
 bot.onText(/\/start/, msg => {
-  let userId = msg.from.id;
-  messages.setUserID(userId); // добавляем userId в модуль messages, чтобы оттуда отправлять сообщения
+  let userId = msg.from.id; // id отправителя сообщения 
   // появление клавиатуры
   bot.sendMessage(userId, ('Hello, ' + msg.from.first_name + '!\n' + messages.botAnswers('firstStart')), {
     reply_markup: {
@@ -26,8 +25,10 @@ bot.onText(/\/start/, msg => {
 // при вводе команд
 bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
   let userId = msg.from.id; // id отправителя сообщения 
+  messages.setUserID(userId); // добавляем userId в модуль messages, чтобы оттуда отправлять сообщения
   let userText = msg.text; // текст отправителя 
-  let expectInput = /(\d\d*)(\s)*(\d\d*)/; // ожидаемые интервалы работы / отдыха; хранятся в match[1] и match[3] 
+  let workRealxRegExp = /(\d\d*) (\d\d*)/; // ожидаемые интервалы работы / отдыха; хранятся в match[1] и match[3] 
+  let wrongTimeRegExp = /(\d)(\d)\:(\d)(\d)/; // время пользователя
   let work = match[1];
   let relax = match[3];
   let note = {
@@ -35,7 +36,7 @@ bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
     'workTime': parseInt(work),
     'relaxTime': parseInt(relax)
   }
-
+  console.log(match[0]);
   if (userText == 'START') {
     // сброс таймера
     botFunctions.clrTimeout();
@@ -47,11 +48,27 @@ bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
     });
   }
   // интервал работы - отдыха
-  else if (expectInput.test(match[0])) {
+  else if (workRealxRegExp.test(match[0])) {
     // сброс таймера, чтобы интервалы не накладывались 
     botFunctions.clrTimeout();
     // отсчет до уведомления
     botFunctions.countdown(bot, note);
+  }
+  // WRONG TIME 
+  else if (userText == 'WRONG TIME') {
+    // сброс таймера
+    botFunctions.clrTimeout();
+    bot.sendMessage(userId, 'Send me the correct time (for example 15:30):', {
+      reply_markup: {
+        keyboard: myKeyboard.stopOnlyKb
+      }
+    });
+  }
+  // указано время 
+  // ! НЕТ СООТВЕТСВИЯ REGEXP  в 26 строке
+  
+  else if (wrongTimeRegExp.test(match[0])) {
+    console.log("Yes!");
   }
   // STOP
   else if (userText == 'STOP') {
