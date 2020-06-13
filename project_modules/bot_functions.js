@@ -18,6 +18,22 @@ function timeLeft(needMin = false) {
         return (hours + 'h ' + minutes + 'min');
 }
 
+// ф-ия подготавливает данные, которые передадутся в ф-ию ожидания отправки уведомления 
+function notePreparing(msg, match) {
+    // сброс таймера, чтобы интервалы не накладывались 
+    clrTimeout(timerId);
+
+    let userId = msg.from.id; // id отправителя сообщения 
+    let work = match[1];
+    let relax = match[3];
+    let retNote = {
+        'usID': userId,
+        'workTime': parseInt(work),
+        'relaxTime': parseInt(relax)
+    }
+    return retNote;
+}
+
 // отсчет времени при передаче боту двух чисел 
 function countdown(bot, note, pauseTimeLeft = 0) {
     let startDate = new Date(); // начальная дата
@@ -25,30 +41,46 @@ function countdown(bot, note, pauseTimeLeft = 0) {
     let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)
     let timeToWork = true;
 
-    // значение по умолчанию - длительность рабочего цикла
-    if (pauseTimeLeft == 0)
-        currentPlus = note.workTime;
-    // если была нажата кнопка паузы
-    else
-        currentPlus = pauseTimeLeft;
-
-    endDate.setMinutes(startDate.getMinutes() + currentPlus); // установка конечной даты
-
-    infoObject = {
-        'note': note,
-        'startDate': startDate,
-        'endDate': endDate,
-        'timeToWork': timeToWork,
-        'currentPlus': currentPlus
-    }
-    // появление клавиатуры
-    let noteTxt = 'It is ' + infoObject.startDate.getHours() + ':' + minuteFormat(infoObject.startDate.getMinutes()) + "\n" + 'I will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes());
-    bot.sendMessage(note.usID, noteTxt, {
-        reply_markup: {
-            keyboard: myKeyboard.stopKb
+    let promise = new Promise((resolve, reject) => {
+        // если указано новое время
+        if (note.startHours && note.startHours) {
+            startDate.setHours(note.startHours);
+            startDate.setMinutes(note.startMinutes);
         }
+        // значение по умолчанию - длительность рабочего цикла
+        if (pauseTimeLeft == 0)
+            currentPlus = note.workTime;
+        // если была нажата кнопка паузы
+        else
+            currentPlus = pauseTimeLeft;
+        resolve();
     });
-    checkCurTime(infoObject);
+    promise.then(() => {
+        endDate.setHours(startDate.getHours());
+        endDate.setMinutes(startDate.getMinutes() + currentPlus); // установка конечной даты
+    });
+    promise.then(() => {
+        infoObject = {
+            'note': note,
+            'startDate': startDate,
+            'endDate': endDate,
+            'timeToWork': timeToWork,
+            'currentPlus': currentPlus
+        }
+        // появление клавиатуры
+        let noteTxt = 'It is ' + infoObject.startDate.getHours() + ':' + minuteFormat(infoObject.startDate.getMinutes()) + "\n" + 'I will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes());
+        bot.sendMessage(note.usID, noteTxt, {
+            reply_markup: {
+                keyboard: myKeyboard.stopKb
+            }
+        });
+    });
+    promise.then(() => {
+        checkCurTime(infoObject);
+    });
+    promise.catch(error => {
+        console.log(error);
+    })
 }
 
 // ф-ия дописывает ведущий 0 к минутам, если число состоит из одной цифры
@@ -90,5 +122,6 @@ function clrTimeout() {
 module.exports = {
     'timeLeft': timeLeft,
     'countdown': countdown,
-    'clrTimeout': clrTimeout
+    'clrTimeout': clrTimeout,
+    'notePreparing': notePreparing
 }

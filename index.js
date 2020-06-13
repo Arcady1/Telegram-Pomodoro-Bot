@@ -10,27 +10,25 @@ const bot = new TelegramBot(token, {
   polling: true
 });
 messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
+let isCommand = false;
+let note; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
 
 bot.on('message', msg => {
-  let isCommand = false;
   let userId = msg.from.id; // id отправителя сообщения 
-  let userText = msg.text; // текст отправителя 
-  let workRealxRegExp = /(\d\d*) (\d\d*)/; // ожидаемые интервалы работы / отдыха; хранятся в match[1] и match[3] 
-  let wrongTimeRegExp = /(\d\d):(\d)(\d)/; // время пользователя
-
   messages.setUserID(userId); // добавляем userId в модуль messages, чтобы оттуда отправлять сообщения
 
   switch (msg.text) {
     case '/start':
+      isCommand = true;
       // появление клавиатуры
       bot.sendMessage(userId, ('Hello, ' + msg.from.first_name + '!\n' + messages.botAnswers('firstStart')), {
         reply_markup: {
           keyboard: myKeyboard.startKb
         }
       });
-      isCommand = true;
       break;
     case 'START':
+      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -39,9 +37,9 @@ bot.on('message', msg => {
           keyboard: myKeyboard.intervalsKb
         }
       });
-      isCommand = true;
       break;
     case 'WRONG TIME':
+      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -50,9 +48,9 @@ bot.on('message', msg => {
           keyboard: myKeyboard.stopOnlyKb
         }
       });
-      isCommand = true;
       break;
     case 'STOP':
+      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -61,9 +59,9 @@ bot.on('message', msg => {
           keyboard: myKeyboard.startKb
         }
       });
-      isCommand = true;
       break;
     case 'PAUSE':
+      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление кнопки RESUME
@@ -72,9 +70,9 @@ bot.on('message', msg => {
           keyboard: myKeyboard.pauseKb
         }
       });
-      isCommand = true;
       break;
     case 'RESUME':
+      isCommand = true;
       // появление кнопки PAUSE
       bot.sendMessage(userId, 'I\'m working again', {
         reply_markup: {
@@ -83,49 +81,46 @@ bot.on('message', msg => {
       }).then(() => {
         botFunctions.countdown(bot, note, botFunctions.timeLeft(true)); // последний аргумент - оставшееся время до уведомления (в min) 
       })
-      isCommand = true;
       break;
     case '/help':
       messages.botSendMyMessage('butHelp');
       isCommand = true;
       break;
-  }
-
-  if (isCommand == false) {
-    // ! /help
+    default:
+      break;
   }
 })
 
+// интервал работы - отдыха или новое время
+bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
+  isCommand = true;
 
+  let promise = new Promise((resolve, reject) => {
+    // если указан интервал
+    if (/([1-9]\d{0,3})( )([1-9]\d{0,3})/.test(match[0])) {
+      note = botFunctions.notePreparing(msg, match);
+      resolve();
+    }
+    // если указано новое время
+    else {
+      let res = match[0].split(':');
+      note.startHours = res[0];
+      note.startMinutes = res[1];
+      resolve();
+    }
+  });
 
-// при вводе команд
-bot.onText(/\/?(\w+)(\s)*(\w+)*/, (msg, match) => {
-
-
-  // !!!
-  let work = match[1];
-  let relax = match[3];
-  let note = {
-    'usID': userId,
-    'workTime': parseInt(work),
-    'relaxTime': parseInt(relax)
-  }
-  console.log(match[0]);
-
-
-  // интервал работы - отдыха
-  else if (workRealxRegExp.test(match[0])) {
-    // сброс таймера, чтобы интервалы не накладывались 
-    botFunctions.clrTimeout();
-    // отсчет до уведомления
+  promise.then(() => {
+    // отсчет времени до уведомления
     botFunctions.countdown(bot, note);
-  }
+  });
 
-  // указано время 
-  // ! НЕТ СООТВЕТСВИЯ REGEXP  в 26 строке
-  else if (wrongTimeRegExp.test(match[0])) {
-    console.log("Yes!");
-  }
-
-
+  promise.catch(error => {
+    console.log(error);
+  });
 })
+
+// !
+// ! не было комманды
+// ! if (isCommand == false)
+// !   messages.botSendMyMessage('butHelp');
