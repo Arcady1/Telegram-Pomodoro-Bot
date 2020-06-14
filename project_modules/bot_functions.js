@@ -4,18 +4,15 @@ let timerId; // таймер проверки сообщений. Сбрасыв
 let infoObject; // объект, содержащий информацию для уведомления
 
 // ф-ия подсчета и вывода времени, оставшегося после нажатия кнопки паузы
-function timeLeft(needMin = false) {
-    let currentDate = new Date();
-    let remains = infoObject.endDate - currentDate; // остаток в мс (от текущего момента до конца)
-    let hours = parseInt(remains / (1000 * 60 * 60));
-    let minutes = parseInt((remains / (1000 * 60)) - (hours * 60)) + 1;
+function timeLeft() {
+    let leftSec = parseInt((infoObject.endDate - infoObject.pauseDate) / 1000); // времени до уведомления (с)
+    let leftHours = parseInt(leftSec / 60 / 60);
+    let leftMinutes = parseInt((leftSec / 60) - (leftHours * 60));
 
-    if (needMin == true)
-        return minutes;
-    if (hours == 0)
-        return (minutes + 'min');
+    if (leftHours == 0)
+        return (leftMinutes + 'min');
     else
-        return (hours + 'h ' + minutes + 'min');
+        return (leftHours + 'h ' + leftMinutes + 'min');
 }
 
 // ф-ия подготавливает данные, которые передадутся в ф-ию ожидания отправки уведомления 
@@ -35,7 +32,7 @@ function notePreparing(msg, match) {
 }
 
 // отсчет времени при передаче боту двух чисел 
-function countdown(bot, note, pauseTimeLeft = 0) {
+function countdown(bot, note, timeFromPause = false) {
     let startDate = new Date(); // начальная дата
     let endDate = new Date(); // дата уведомления
     let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)
@@ -43,16 +40,16 @@ function countdown(bot, note, pauseTimeLeft = 0) {
 
     let promise = new Promise((resolve, reject) => {
         // если указано новое время
-        if (note.startHours && note.startHours) {
+        if (note.startHours && note.startMinutes)
             startDate.setHours(note.startHours);
-            startDate.setMinutes(note.startMinutes);
-        }
         // значение по умолчанию - длительность рабочего цикла
-        if (pauseTimeLeft == 0)
+        if (timeFromPause == false)
             currentPlus = note.workTime;
-        // если была нажата кнопка паузы
-        else
-            currentPlus = pauseTimeLeft;
+        // если была нажата кнопка PAUSE а затем RESUME
+        else {
+            let delX = infoObject.pauseDate - infoObject.startDate;
+            currentPlus = parseInt((infoObject.endDate - infoObject.startDate - delX) / 1000 / 60); // время от паузы до старта отсчета (мин)
+        }
         resolve();
     });
     promise.then(() => {
@@ -76,7 +73,8 @@ function countdown(bot, note, pauseTimeLeft = 0) {
         });
     });
     promise.then(() => {
-        checkCurTime(infoObject);
+        bot.sendMessage(infoObject.note.usID, JSON.stringify(infoObject, null, 4));
+        checkCurTime();
     });
     promise.catch(error => {
         console.log(error);
@@ -92,8 +90,14 @@ function minuteFormat(minute) {
 }
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
-function checkCurTime(infoObject) {
-    let currentDate = new Date();
+function checkCurTime() {
+    let currentDate = new Date(); // текущее время 
+    // !currentDate.setHours(16);
+    console.log(currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
+    // messages.botSendMyMessage(JSON.stringify(infoObject, null, 4));
+    // !
+    let plusPastSec = parseInt((currentDate - infoObject.startDate) / 1000 / 60); // прошедшее время (с) 
+    infoObject.pastSec = plusPastSec;
     // если пришло время, присылать уведомление
     if ((currentDate.getHours() == infoObject.endDate.getHours()) && (currentDate.getMinutes() == infoObject.endDate.getMinutes())) {
         let word;
@@ -110,9 +114,13 @@ function checkCurTime(infoObject) {
 
         infoObject.startDate = currentDate;
         infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
-        messages.botSendMyMessage('It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
+        // !
+        console.log('NICE!');
+        // !
+        // messages.botSendMyMessage('It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
     }
-    timerId = setTimeout(checkCurTime, 2000, infoObject);
+    infoObject.pauseDate = currentDate; // время остановки бота (пауза)
+    timerId = setTimeout(checkCurTime, 2000);
 }
 
 function clrTimeout() {

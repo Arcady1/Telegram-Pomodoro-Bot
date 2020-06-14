@@ -11,7 +11,7 @@ const bot = new TelegramBot(token, {
 });
 messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
 let isCommand = false;
-let note; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
+let note = {}; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
 
 bot.on('message', msg => {
   let userId = msg.from.id; // id отправителя сообщения 
@@ -65,7 +65,7 @@ bot.on('message', msg => {
       // сброс таймера
       botFunctions.clrTimeout();
       // появление кнопки RESUME
-      bot.sendMessage(userId, messages.botAnswers('butPause', botFunctions.timeLeft()), {
+      bot.sendMessage(userId, messages.botAnswers('butPause'), {
         reply_markup: {
           keyboard: myKeyboard.pauseKb
         }
@@ -79,7 +79,7 @@ bot.on('message', msg => {
           keyboard: myKeyboard.stopKb
         }
       }).then(() => {
-        botFunctions.countdown(bot, note, botFunctions.timeLeft(true)); // последний аргумент - оставшееся время до уведомления (в min) 
+        botFunctions.countdown(bot, note, true);
       })
       break;
     case '/help':
