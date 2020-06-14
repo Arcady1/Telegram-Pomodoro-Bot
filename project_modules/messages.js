@@ -27,8 +27,8 @@ function botAnswers(commandText) {
 }
 
 function botSendMyMessage(textOrCommand) {
-  textOrCommand = botAnswers(textOrCommand); // если введена не команда, то botAnswers вернет переданное сообщение, иначе - подсказку
-  bot.sendMessage(userID, textOrCommand);
+  txt = botAnswers(textOrCommand); // если введена не команда, то botAnswers вернет переданное сообщение, иначе - подсказку
+  bot.sendMessage(userID, txt);
 }
 
 module.exports = {

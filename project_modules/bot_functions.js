@@ -1,7 +1,8 @@
-const messages = require('./messages'); // модуль с уведомлениями 
 const myKeyboard = require('./keyboard'); // модуль с клавиатурой 
+const messages = require('./messages'); // модуль с уведомлениями 
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 let infoObject; // объект, содержащий информацию для уведомления
+let bot;
 
 // ф-ия подсчета и вывода времени, оставшегося после нажатия кнопки паузы
 function timeLeft() {
@@ -32,7 +33,8 @@ function notePreparing(msg, match) {
 }
 
 // отсчет времени при передаче боту двух чисел 
-function countdown(bot, note, timeFromPause = false) {
+function countdown(bot_, note, timeFromPause = false) {
+    bot = bot_;
     let startDate = new Date(); // начальная дата
     let endDate = new Date(); // дата уведомления
     let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)
@@ -74,7 +76,7 @@ function countdown(bot, note, timeFromPause = false) {
     });
     promise.then(() => {
         bot.sendMessage(infoObject.note.usID, JSON.stringify(infoObject, null, 4));
-        checkCurTime();
+        checkCurTime(infoObject);
     });
     promise.catch(error => {
         console.log(error);
@@ -91,13 +93,12 @@ function minuteFormat(minute) {
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime() {
-    let currentDate = new Date(); // текущее время 
+    let currentDate = new Date(); // ! установить время исзодя из смещения  
     // !currentDate.setHours(16);
     console.log(currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
-    // messages.botSendMyMessage(JSON.stringify(infoObject, null, 4));
     // !
-    let plusPastSec = parseInt((currentDate - infoObject.startDate) / 1000 / 60); // прошедшее время (с) 
-    infoObject.pastSec = plusPastSec;
+    let plusPasrMin = parseInt((currentDate - infoObject.startDate) / 1000 / 60); // прошедшее время (с) 
+    infoObject.pastMin = plusPasrMin;
     // если пришло время, присылать уведомление
     if ((currentDate.getHours() == infoObject.endDate.getHours()) && (currentDate.getMinutes() == infoObject.endDate.getMinutes())) {
         let word;
@@ -114,12 +115,9 @@ function checkCurTime() {
 
         infoObject.startDate = currentDate;
         infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
-        // !
-        console.log('NICE!');
-        // !
-        // messages.botSendMyMessage('It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
+        bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
     }
-    infoObject.pauseDate = currentDate; // время остановки бота (пауза)
+    // infoObject.pauseDate = currentDate; // время остановки бота (пауза)
     timerId = setTimeout(checkCurTime, 2000);
 }
 
