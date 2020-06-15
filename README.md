@@ -40,7 +40,7 @@
 
 
 
-[1]: https://t.me/X_52_17_bot                                                             "bot"
+[1]: https://t.me/pomodoro_25and5_bot                                                     "bot"
 [2]: https://glitch.com/                                                                  "Glitch"
 [3]: https://glitch.com/help/restrictions/                                                "timing-Glitch"
 [4]: https://github.com/nvm-sh/nvm                                                        "nvm"
