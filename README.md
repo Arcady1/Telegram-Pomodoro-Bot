@@ -34,9 +34,9 @@
 После чего заходим в профиль, находим *Recent Projects* и кликаем на проект.  
 Появится окошко с надписью *Started*. Пока оно активно, бот работает. В противном случае он отключится через 5 мин. Подробнее можно прочитать [здесь][3].  
 
-## Будет полезно
-[nvm-sh/nvm][4]  
-[Telegram bot on JavaScript with free hosting][5]  
+## Может быть полезно
+* [nvm-sh/nvm][4]  
+* [Telegram bot on JavaScript with free hosting][5]  
 
 
 
