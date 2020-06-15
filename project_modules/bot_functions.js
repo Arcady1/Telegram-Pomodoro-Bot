@@ -1,7 +1,7 @@
 const myKeyboard = require('./keyboard'); // модуль с клавиатурой 
-const messages = require('./messages'); // модуль с уведомлениями 
 let timerId; // таймер проверки сообщений. Сбрасывется, чтобы бот не продолжал работу после нажатия на кнопку Stop
 let infoObject; // объект, содержащий информацию для уведомления
+let currentDate = new Date(); // текущее время
 let bot;
 
 // ф-ия подсчета и вывода времени, оставшегося после нажатия кнопки паузы
@@ -42,8 +42,10 @@ function countdown(bot_, note, timeFromPause = false) {
 
     let promise = new Promise((resolve, reject) => {
         // если указано новое время
-        if (note.startHours && note.startMinutes)
+        if (note.startHours && note.startMinutes) {
             startDate.setHours(note.startHours);
+            currentDate.setHours(startDate.getHours());
+        }
         // значение по умолчанию - длительность рабочего цикла
         if (timeFromPause == false)
             currentPlus = note.workTime;
@@ -93,7 +95,7 @@ function minuteFormat(minute) {
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime() {
-    let currentDate = new Date();
+    currentDate.setSeconds(currentDate.getSeconds() + 2);
     // ! 
     console.log(currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
     // ! 
