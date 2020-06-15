@@ -10,7 +10,6 @@ const bot = new TelegramBot(token, {
   polling: true
 });
 messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
-let isCommand = false;
 let note = {}; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
 
 bot.on('message', msg => {
@@ -19,7 +18,6 @@ bot.on('message', msg => {
 
   switch (msg.text) {
     case '/start':
-      isCommand = true;
       // появление клавиатуры
       bot.sendMessage(userId, ('Hello, ' + msg.from.first_name + '!\n' + messages.botAnswers('firstStart')), {
         reply_markup: {
@@ -28,7 +26,6 @@ bot.on('message', msg => {
       });
       break;
     case 'START':
-      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -39,7 +36,6 @@ bot.on('message', msg => {
       });
       break;
     case 'WRONG TIME':
-      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -50,7 +46,6 @@ bot.on('message', msg => {
       });
       break;
     case 'STOP':
-      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -61,7 +56,6 @@ bot.on('message', msg => {
       });
       break;
     case 'PAUSE':
-      isCommand = true;
       // сброс таймера
       botFunctions.clrTimeout();
       // появление кнопки RESUME
@@ -72,7 +66,6 @@ bot.on('message', msg => {
       });
       break;
     case 'RESUME':
-      isCommand = true;
       // появление кнопки PAUSE
       bot.sendMessage(userId, 'I\'m working again', {
         reply_markup: {
@@ -84,7 +77,6 @@ bot.on('message', msg => {
       break;
     case '/help':
       messages.botSendMyMessage('butHelp');
-      isCommand = true;
       break;
     default:
       break;
@@ -93,8 +85,6 @@ bot.on('message', msg => {
 
 // интервал работы - отдыха или новое время
 bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
-  isCommand = true;
-
   let promise = new Promise((resolve, reject) => {
     // если указан интервал
     if (/([1-9]\d{0,3})( )([1-9]\d{0,3})/.test(match[0])) {
@@ -109,18 +99,11 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
       resolve();
     }
   });
-
   promise.then(() => {
     // отсчет времени до уведомления
     botFunctions.countdown(bot, note);
   });
-
   promise.catch(error => {
     console.log(error);
   });
 })
-
-// !
-// ! не было комманды
-// ! if (isCommand == false)
-// !   messages.botSendMyMessage('butHelp');
