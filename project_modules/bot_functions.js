@@ -75,7 +75,7 @@ function countdown(bot_, note, timeFromPause = false) {
         });
     });
     promise.then(() => {
-        bot.sendMessage(infoObject.note.usID, JSON.stringify(infoObject, null, 4));
+        // ! bot.sendMessage(infoObject.note.usID, JSON.stringify(infoObject, null, 4));
         checkCurTime(infoObject);
     });
     promise.catch(error => {
