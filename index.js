@@ -39,7 +39,7 @@ bot.on('message', msg => {
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
-      bot.sendMessage(userId, 'What\'s time is it? (for example 15:30):', {
+      bot.sendMessage(userId, 'What\'s time is it (for example 15:30)?:', {
         reply_markup: {
           keyboard: myKeyboard.stopOnlyKb
         }
