@@ -93,10 +93,10 @@ function minuteFormat(minute) {
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime() {
-    let currentDate = new Date(); // ! установить время исзодя из смещения  
-    // !currentDate.setHours(16);
+    let currentDate = new Date();
+    // ! 
     console.log(currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
-    // !
+    // ! 
     let plusPasrMin = parseInt((currentDate - infoObject.startDate) / 1000 / 60); // прошедшее время (с) 
     infoObject.pastMin = plusPasrMin;
     // если пришло время, присылать уведомление
@@ -117,7 +117,7 @@ function checkCurTime() {
         infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
         bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
     }
-    // infoObject.pauseDate = currentDate; // время остановки бота (пауза)
+    infoObject.pauseDate = currentDate; // время остановки бота (пауза)
     timerId = setTimeout(checkCurTime, 2000);
 }
 
