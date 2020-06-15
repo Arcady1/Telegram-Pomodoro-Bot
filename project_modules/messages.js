@@ -13,13 +13,13 @@ function setUserID(user_id) {
 // ф-ия принимает текст сообщения и возвращает строку  
 function botAnswers(commandText) {
   if (commandText == 'firstStart')
-    return ('This bot will write you, when you have to work and relax.\nPress START to begin.');
+    return ('This bot will write you, when you have to work and relax.\n\nPress START to begin.\n/\help');
   if (commandText == 'butStart')
-    return ('You can select the interval or state your own one, for example: 30 15.\n\nMinimum: 1min\nMaximum: 1439min (23h 59min)\n\nNotifications will be sent until then you press or write STOP.');
+    return ('You can select the interval or state your own one, for example: 30 15.\n\nMinimum: 1min\nMaximum: 1439min (23h 59min)\n\nNotifications will be sent until then you press or write STOP.\n/\help');
   if (commandText == 'butStop')
     return ('Press START to restart me or \/help for help.');
   if (commandText == 'butPause')
-    return ('On PAUSE\n\nTime left: ' + botFunctions.timeLeft());
+    return ('On PAUSE\n\nTime left: ' + botFunctions.timeLeft() + '\n/\help');
   if (commandText == 'butHelp')
     return ('Available commands:\n\n\/start - restart the bot\nSTART - select a new interval\nSTOP - stop working\nPAUSE - pause the timer\nWRONG TIME - set the correct time');
 
