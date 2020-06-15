@@ -4,6 +4,11 @@ let infoObject; // объект, содержащий информацию дл�
 let currentDate = new Date(); // текущее время
 let bot;
 
+setInterval(() => {
+    currentDate.setSeconds(currentDate.getSeconds() + 2);
+    console.log(currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
+}, 2000);
+
 // ф-ия подсчета и вывода времени, оставшегося после нажатия кнопки паузы
 function timeLeft() {
     let leftSec = parseInt((infoObject.endDate - infoObject.pauseDate) / 1000); // времени до уведомления (с)
@@ -77,7 +82,6 @@ function countdown(bot_, note, timeFromPause = false) {
         });
     });
     promise.then(() => {
-        // ! bot.sendMessage(infoObject.note.usID, JSON.stringify(infoObject, null, 4));
         checkCurTime(infoObject);
     });
     promise.catch(error => {
@@ -95,10 +99,6 @@ function minuteFormat(minute) {
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime() {
-    currentDate.setSeconds(currentDate.getSeconds() + 2);
-    // ! 
-    console.log(currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
-    // ! 
     let plusPasrMin = parseInt((currentDate - infoObject.startDate) / 1000 / 60); // прошедшее время (с) 
     infoObject.pastMin = plusPasrMin;
     // если пришло время, присылать уведомление
