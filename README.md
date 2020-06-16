@@ -1,4 +1,4 @@
-# [Telegram Pomodoro Bot][1] (This guide will soon be translated in English)
+# [Telegram Pomodoro Bot][1] (this guide will soon be translated in English)
 
 ## Описание
 Данный бот позволяет работать эффективнее, напоминая, когда пришло время поработать, а когда - отдохнуть.  
