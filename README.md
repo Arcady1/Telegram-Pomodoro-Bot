@@ -39,7 +39,7 @@
 ## Может быть полезно
 * [nvm-sh/nvm][4]  
 * [Telegram bot on JavaScript with free hosting][5]  
-* [Deploying a GitHub app to Glitch]
+* [Deploying a GitHub app to Glitch][6]
 
 
 
