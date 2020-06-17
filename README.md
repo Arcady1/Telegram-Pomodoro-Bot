@@ -39,6 +39,7 @@
 ## Может быть полезно
 * [nvm-sh/nvm][4]  
 * [Telegram bot on JavaScript with free hosting][5]  
+* [Deploying a GitHub app to Glitch]
 
 
 
@@ -47,3 +48,4 @@
 [3]: https://glitch.com/help/restrictions/                                                "timing-Glitch"
 [4]: https://github.com/nvm-sh/nvm                                                        "nvm"
 [5]: https://medium.com/roomjs/telegram-bot-on-javascript-with-free-hosting-53ae01bce991  "medium"
+[6]: https://andrewlock.net/creating-my-first-github-app-with-probot-part-3-deploying-to-glitch/
