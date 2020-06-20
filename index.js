@@ -11,6 +11,7 @@ const bot = new TelegramBot(token, {
 });
 messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
 let note = {}; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
+let currentDate = new Date(); // текущее время
 
 bot.on('message', msg => {
   let userId = msg.from.id; // id отправителя сообщения 
@@ -96,6 +97,8 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
       let res = match[0].split(':');
       note.startHours = res[0];
       note.startMinutes = res[1];
+      currentDate.setHours(res[0]);
+      botFunctions.setHoursFun(currentDate);
       resolve();
     }
   });

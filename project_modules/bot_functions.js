@@ -46,11 +46,7 @@ function countdown(bot_, note, timeFromPause = false) {
     let timeToWork = true;
 
     let promise = new Promise((resolve, reject) => {
-        // если указано новое время
-        if (note.startHours && note.startMinutes) {
-            startDate.setHours(note.startHours);
-            currentDate.setHours(startDate.getHours());
-        }
+        startDate.setHours(currentDate.getHours());
         // значение по умолчанию - длительность рабочего цикла
         if (timeFromPause == false)
             currentPlus = note.workTime;
@@ -124,9 +120,14 @@ function clrTimeout() {
     clearTimeout(timerId);
 }
 
+function setHoursFun(newTime) {
+    currentDate.setHours(newTime.getHours());
+}
+
 module.exports = {
     'timeLeft': timeLeft,
     'countdown': countdown,
     'clrTimeout': clrTimeout,
-    'notePreparing': notePreparing
+    'notePreparing': notePreparing,
+    'setHoursFun': setHoursFun
 }
