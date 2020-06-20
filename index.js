@@ -22,6 +22,7 @@ bot.on('message', msg => {
       // появление клавиатуры
       bot.sendMessage(userId, ('Hello, ' + msg.from.first_name + '!\n' + messages.botAnswers('firstStart')), {
         reply_markup: {
+          resize_keyboard: true,
           keyboard: myKeyboard.startKb
         }
       });
@@ -32,6 +33,7 @@ bot.on('message', msg => {
       // появление клавиатуры
       bot.sendMessage(userId, messages.botAnswers('butStart'), {
         reply_markup: {
+          resize_keyboard: true,
           keyboard: myKeyboard.intervalsKb
         }
       });
@@ -42,6 +44,7 @@ bot.on('message', msg => {
       // появление клавиатуры
       bot.sendMessage(userId, 'What\'s time is it (for example 15:30)?', {
         reply_markup: {
+          resize_keyboard: true,
           keyboard: myKeyboard.stopOnlyKb
         }
       });
@@ -52,6 +55,7 @@ bot.on('message', msg => {
       // появление клавиатуры
       bot.sendMessage(userId, messages.botAnswers('butStop'), {
         reply_markup: {
+          resize_keyboard: true,
           keyboard: myKeyboard.startKb
         }
       });
@@ -62,6 +66,7 @@ bot.on('message', msg => {
       // появление кнопки RESUME
       bot.sendMessage(userId, messages.botAnswers('butPause'), {
         reply_markup: {
+          resize_keyboard: true,
           keyboard: myKeyboard.pauseKb
         }
       });
@@ -70,6 +75,7 @@ bot.on('message', msg => {
       // появление кнопки PAUSE
       bot.sendMessage(userId, 'I\'m working again', {
         reply_markup: {
+          resize_keyboard: true,
           keyboard: myKeyboard.stopKb
         }
       }).then(() => {

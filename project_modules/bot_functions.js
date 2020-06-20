@@ -71,6 +71,7 @@ function countdown(bot_, note, timeFromPause = false) {
         let noteTxt = 'It is ' + infoObject.startDate.getHours() + ':' + minuteFormat(infoObject.startDate.getMinutes()) + "\n" + 'I will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes());
         bot.sendMessage(note.usID, noteTxt, {
             reply_markup: {
+                resize_keyboard: true,
                 keyboard: myKeyboard.stopKb
             }
         });
