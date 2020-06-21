@@ -19,7 +19,7 @@ function botAnswers(commandText) {
   if (commandText == 'butStop')
     return ('Press START to restart me or \/help for help.');
   if (commandText == 'butPause')
-    return ('On PAUSE\n\nTime left: ' + botFunctions.timeLeft() + '\n/\help');
+    return ('On PAUSE\n\nTime left: ' + botFunctions.timeLeft());
   if (commandText == 'butHelp')
     return ('Available commands:\n\n\/start - restart the bot\nSTART - select a new interval\nSTOP - stop working\nPAUSE - pause the timer\nWRONG TIME - set the correct time');
 
