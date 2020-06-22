@@ -4,11 +4,6 @@ let infoObject; // объект, содержащий информацию дл�
 let currentDate = new Date(); // текущее время
 let bot;
 
-setInterval(() => {
-    currentDate.setSeconds(currentDate.getSeconds() + 2);
-    console.log(currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
-}, 2000);
-
 // ф-ия подсчета и вывода времени, оставшегося после нажатия кнопки паузы
 function timeLeft() {
     let leftMin = infoObject.currentPlus - infoObject.pastMin;
@@ -114,15 +109,15 @@ function checkCurTime() {
         infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
         bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
     }
-    timerId = setTimeout(checkCurTime, 2000);
+    timerId = setTimeout(checkCurTime, 1000);
 }
 
 function clrTimeout() {
     clearTimeout(timerId);
 }
 
-function setHoursFun(newTime) {
-    currentDate.setHours(newTime.getHours());
+function setNewTime(newTime) {
+    currentDate = newTime;
 }
 
 module.exports = {
@@ -130,5 +125,5 @@ module.exports = {
     'countdown': countdown,
     'clrTimeout': clrTimeout,
     'notePreparing': notePreparing,
-    'setHoursFun': setHoursFun
+    'setNewTime': setNewTime
 }

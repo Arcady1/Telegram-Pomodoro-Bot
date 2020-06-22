@@ -104,7 +104,6 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
       note.startHours = res[0];
       note.startMinutes = res[1];
       currentDate.setHours(res[0]);
-      botFunctions.setHoursFun(currentDate);
       resolve();
     }
   });
@@ -116,3 +115,9 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
     console.log(error);
   });
 })
+
+setInterval(() => {
+  console.log("Main: " + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
+  botFunctions.setNewTime(currentDate);
+  currentDate.setSeconds(currentDate.getSeconds() + 1);
+}, 1000);
