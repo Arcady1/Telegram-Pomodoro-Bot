@@ -12,6 +12,7 @@ const bot = new TelegramBot(token, {
 messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
 let note = {}; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
 let currentDate = new Date(); // текущее время
+let newZoneHours = 3; // текущая Time zone
 
 bot.on('message', msg => {
   let userId = msg.from.id; // id отправителя сообщения 
@@ -103,7 +104,9 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
       let res = match[0].split(':');
       note.startHours = res[0];
       note.startMinutes = res[1];
-      currentDate.setHours(res[0]);
+      currentDate = new Date();
+      newZoneHours = res[0] - currentDate.getHours();
+      // ! currentDate.setHours(res[0]);
       resolve();
     }
   });
@@ -118,6 +121,20 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
 
 setInterval(() => {
   console.log("Main: " + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
-  botFunctions.setNewTime(currentDate);
-  currentDate.setSeconds(currentDate.getSeconds() + 1);
+  UpdateHours();
 }, 1000);
+
+function UpdateHours() {
+  currentDate = new Date();
+  console.log("getHours " + currentDate.getHours());
+  console.log("newZoneHours " + newZoneHours);
+  
+  let prom = new Promise((resolve, reject) => {
+    currentDate.setHours(currentDate.getHours() + parseInt(newZoneHours));
+    console.log('===== ' + currentDate);
+    resolve();
+  });
+  prom.then(() => {
+    botFunctions.setNewTime(currentDate);
+  })
+}
