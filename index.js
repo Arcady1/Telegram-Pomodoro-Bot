@@ -2,17 +2,15 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const myKeyboard = require('./project_modules/keyboard'); // модуль с клавиатурой 
 const messages = require('./project_modules/messages'); // модуль с уведомлениями 
-const config = require('./project_modules/config'); // модуль с конфигурацией проекта 
 const botFunctions = require('./project_modules/bot_functions'); // модуль с функциями и методами бота 
 
-const token = config.TOKEN; // TOKEN бота
+const token = process.env.TOKEN; // TOKEN бота
 const bot = new TelegramBot(token, {
   polling: true
 });
 messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
 let note = {}; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
 let currentDate = new Date(); // текущее время
-let newZoneHours = 3; // текущая Time zone
 
 bot.on('message', msg => {
   let userId = msg.from.id; // id отправителя сообщения 
@@ -104,9 +102,7 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
       let res = match[0].split(':');
       note.startHours = res[0];
       note.startMinutes = res[1];
-      currentDate = new Date();
-      newZoneHours = res[0] - currentDate.getHours();
-      // ! currentDate.setHours(res[0]);
+      currentDate.setHours(res[0]);
       resolve();
     }
   });
@@ -121,20 +117,13 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
 
 setInterval(() => {
   console.log("Main: " + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
-  UpdateHours();
+  currentDate.setSeconds(currentDate.getSeconds() + 1);
+  botFunctions.setNewTime(currentDate);
 }, 1000);
 
-function UpdateHours() {
+setInterval(() => {
+  let updateHours = currentDate.getHours();
   currentDate = new Date();
-  console.log("getHours " + currentDate.getHours());
-  console.log("newZoneHours " + newZoneHours);
-  
-  let prom = new Promise((resolve, reject) => {
-    currentDate.setHours(currentDate.getHours() + parseInt(newZoneHours));
-    console.log('===== ' + currentDate);
-    resolve();
-  });
-  prom.then(() => {
-    botFunctions.setNewTime(currentDate);
-  })
-}
+  currentDate.setHours(updateHours)
+  console.log('New Time: ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
+}, 20000);

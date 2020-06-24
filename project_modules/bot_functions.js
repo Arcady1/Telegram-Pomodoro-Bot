@@ -109,7 +109,7 @@ function checkCurTime() {
         infoObject.endDate.setMinutes(infoObject.startDate.getMinutes() + infoObject.currentPlus);
         bot.sendMessage(infoObject.note.usID, 'It\'s time to ' + word + '!\nI will call you at ' + infoObject.endDate.getHours() + ':' + minuteFormat(infoObject.endDate.getMinutes()));
     }
-    timerId = setTimeout(checkCurTime, 1000);
+    timerId = setTimeout(checkCurTime, 500);
 }
 
 function clrTimeout() {
