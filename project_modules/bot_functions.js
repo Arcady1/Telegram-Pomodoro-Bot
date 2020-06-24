@@ -48,11 +48,10 @@ function countdown(bot_, note, timeFromPause = false) {
         // если была нажата кнопка PAUSE а затем RESUME
         else
             currentPlus = parseInt(parseInt(infoObject.currentPlus - infoObject.pastMin)); // время от паузы до старта отсчета (мин)
-        resolve();
-    });
-    promise.then(() => {
+        // установка конечной даты
         endDate.setHours(startDate.getHours());
-        endDate.setMinutes(startDate.getMinutes() + currentPlus); // установка конечной даты
+        endDate.setMinutes(startDate.getMinutes() + currentPlus);
+        resolve();
     });
     promise.then(() => {
         infoObject = {
@@ -70,8 +69,6 @@ function countdown(bot_, note, timeFromPause = false) {
                 keyboard: myKeyboard.stopKb
             }
         });
-    });
-    promise.then(() => {
         checkCurTime(infoObject);
     });
     promise.catch(error => {
