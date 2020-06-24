@@ -115,12 +115,14 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
   });
 })
 
+// каждую секунду обновляем время
 setInterval(() => {
   console.log("Main: " + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
   currentDate.setSeconds(currentDate.getSeconds() + 1);
   botFunctions.setNewTime(currentDate);
 }, 1000);
 
+// каждые 20 секунд синхронизируем время
 setInterval(() => {
   let updateHours = currentDate.getHours();
   currentDate = new Date();
