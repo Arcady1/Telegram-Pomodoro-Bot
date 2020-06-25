@@ -2,10 +2,9 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const myKeyboard = require('./project_modules/keyboard'); // модуль с клавиатурой 
 const messages = require('./project_modules/messages'); // модуль с уведомлениями 
-const config = require('./project_modules/config'); // модуль с конфигурацией проекта 
 const botFunctions = require('./project_modules/bot_functions'); // модуль с функциями и методами бота 
 
-const token = config.TOKEN; // TOKEN бота
+const token = process.env.TOKEN; // TOKEN бота
 const bot = new TelegramBot(token, {
   polling: true
 });
@@ -116,8 +115,17 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
   });
 })
 
+// каждую секунду обновляем время
 setInterval(() => {
   console.log("Main: " + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
-  botFunctions.setNewTime(currentDate);
   currentDate.setSeconds(currentDate.getSeconds() + 1);
+  botFunctions.setNewTime(currentDate);
 }, 1000);
+
+// каждые 20 секунд синхронизируем время
+setInterval(() => {
+  let updateHours = currentDate.getHours();
+  currentDate = new Date();
+  currentDate.setHours(updateHours)
+  console.log('New Time: ' + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
+}, 20000);
