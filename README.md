@@ -11,20 +11,20 @@ For example, if it's 9:00 and you send two numbers to the bot 50 and 10 (minutes
 4. Then you should remove unused modules paths to exclude errors. I recommend adding the telegram bot token to *.env* and name it TOKEN, for example. And use `const token = process.env.TOKEN;` to create token.  
 
 
-If you don't see any errors in *Tools*, my congratulations!  
+If you don't see any errors in *Tools*, congratulations!  
 Otherwise continue reading.
 ***
 
-В левом нижнем углу нажимаем *Tools*, *Terminal* и пишем следующие команды:  
+Open the terminal in *Tools*, *Terminal* and write:  
 `apt-get update`  
 `apt-get install git -su`.  
-В качестве проверки вводим команду `git`. Ошибок быть не должно  
+`git`. There must be no mistake.  
 `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash`.  
-Следующая команда довольно длинная, ввести ее нужно целиком:  
+The next command is quite large:  
 `export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"`.  
-Чтобы проверить, установился ли nvm вводим команду `nvm`.   
-Если появились ошибки или ничего не отобразилось, посмотрите команды [в этом репозитории][4].  
+Write `nvm` to check if the loading was correct.  
+If there are any errors check the command [in this repository][4].  
 `nvm install <version>`. Вместо *version* указываем ту версию, которая использовалась при разработке проекта.  
 Чтобы ее узнать, необходимо ввести в терминале своего ПК `node -v`.  
 `nvm use <version>`. Вместо *version* указать ту же версию, что и на предыдущем шаге.  
