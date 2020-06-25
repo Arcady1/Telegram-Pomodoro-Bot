@@ -24,12 +24,12 @@ The next command is quite large:
 `export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"`.  
 Write `nvm` to check if the loading was correct.  
-If there are any errors check the command [in this repository][4].  
+If there are any errors, copy the command [from this repository][4].  
 `nvm install <version>`. Instead of *version* specify those version you use in the project.  
 To find it out you need to enter `node -v` in your PC terminal.  
-`nvm use <version>`. Instaed od *version* specify those version you use in the project.  
+`nvm use <version>`. Instaed of *version* specify those version you use in the project.  
 `node -v`.  
-It's time to install packages used in the project:
+It's time to install packages, used in the project:
 `npm i`.  
 Start the bot:  
 `npm run start`.  
