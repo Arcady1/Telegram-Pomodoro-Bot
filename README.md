@@ -25,19 +25,19 @@ The next command is quite large:
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"`.  
 Write `nvm` to check if the loading was correct.  
 If there are any errors check the command [in this repository][4].  
-`nvm install <version>`. Вместо *version* указываем ту версию, которая использовалась при разработке проекта.  
-Чтобы ее узнать, необходимо ввести в терминале своего ПК `node -v`.  
-`nvm use <version>`. Вместо *version* указать ту же версию, что и на предыдущем шаге.  
-`node -v`. Должна появиться используемая версия.  
-Осталось установить пакеты, используемые в проекте:
+`nvm install <version>`. Instead of *version* specify those version you use in the project.  
+To find it out you need to enter `node -v` in your PC terminal.  
+`nvm use <version>`. Instaed od *version* specify those version you use in the project.  
+`node -v`.  
+It's time to install packages used in the project:
 `npm i`.  
-Запускаем бота:  
+Start the bot:  
 `npm run start`.  
-Если через несколько секунд появляется ошибка ` {"code":"ETELEGRAM","message":"ETELEGRAM: 409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running"}`, значит, ваш бот уже работает. Просто нажмите Ctrl + C.  
-После чего заходим в профиль, находим *Recent Projects* и кликаем на проект.  
-Появится окошко с надписью *Started*. Пока оно активно, бот работает. В противном случае он отключится через 5 мин. Подробнее можно прочитать [здесь][3].  
+If you see ` {"code":"ETELEGRAM","message":"ETELEGRAM: 409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running"}`, it means that your bot has been started. Press Ctrl + C.  
+That's all!  
+[Uptime, Container Space, Request Rate][3].  
 
-## Может быть полезно
+## Can be useful
 * [nvm-sh/nvm][4]  
 * [Telegram bot on JavaScript with free hosting][5]  
 * [Deploying a GitHub app to Glitch][6]
