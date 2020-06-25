@@ -11,7 +11,8 @@ For example, if it's 9:00 and you send two numbers to the bot 50 and 10 (minutes
 4. Then you should remove unused modules paths to exclude errors. I recommend adding the telegram bot token to *.env* and name it TOKEN, for example; `const token = process.env.TOKEN;`.  
 
 
-If you don't see any errors in *Tools*, congratulations! Otherwise, continue reading.
+If you don't see any errors in *Tools*, congratulations!  
+Otherwise, continue reading.
 ***
 
 Open the terminal in *Tools*, *Terminal* and write:  
