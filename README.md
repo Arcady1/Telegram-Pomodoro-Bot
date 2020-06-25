@@ -1,42 +1,43 @@
 # [Telegram Pomodoro Bot][1]
 
-## Описание (this guide will soon be translated in English)
-Данный бот позволяет работать эффективнее, напоминая, когда пришло время поработать, а когда - отдохнуть.  
-Представим, что сейчас 9:00. Вы отправляете боту два числа, например: 50 10, где 50 - время, выделенное на работу (в минутах), 10 - на отдых. 
-Тогда бот напишет в 9:50 и 10:00; 10:50 и 11:00 и т.д.
+## Description
+This bot let you work more effective. It reminds you when it's time to work and relax.  
+For example, if it's 9:00 and you send two numbers to the bot 50 and 10 (minutes) it will write you at 9:50, 10:00, 10:50, 11:00, and so on.  
 
-## Деплой Telegram бота на [Glitch][2]
-1. Регистрируемся на сайте (есть возможность авторизоваться с помощью GitHub).
-2. Создаем новый проект *NewProject*.
-3. Нажимаем *Import from GitHub* и указываем путь к репозиторию.
-4. После чего следует удалить из проекта пути к модулям, которые не были залиты на GitHub (если таковые имеются). Также рекомендую перенести в *.env* TOKEN вашего бота, чтобы никто не мог его увидеть, а в самом коде прописать `const token = process.env.TOKEN;`, где token - переменная, котрую вы используете, а TOKEN - имя переменной из *.env*.  
-  
-Если после проделанной работы справа от вкладки *Tools* (левый нижний угол) написанно *Error*, читайте далее, в противном случае - поздравляю, сервер заработал!
+## Deploy on [Glitch][2]
+1. Sign in / sign up.
+2. Create a *NewProject*.
+3. *Import from GitHub* and paste the path to your repository.
+4. Then you should remove unused modules paths to exclude errors. I recommend adding the telegram bot token to *.env* and name it TOKEN, for example; `const token = process.env.TOKEN;`.  
+
+
+If you don't see any errors in *Tools*, congratulations!  
+Otherwise, continue reading.
 ***
 
-В левом нижнем углу нажимаем *Tools*, *Terminal* и пишем следующие команды:  
+Open the terminal in *Tools*, *Terminal* and write:  
 `apt-get update`  
 `apt-get install git -su`.  
-В качестве проверки вводим команду `git`. Ошибок быть не должно  
+`git`. There must be no mistake.  
 `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash`.  
-Следующая команда довольно длинная, ввести ее нужно целиком:  
+The next command is quite large:  
 `export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"`.  
-Чтобы проверить, установился ли nvm вводим команду `nvm`.   
-Если появились ошибки или ничего не отобразилось, посмотрите команды [в этом репозитории][4].  
-`nvm install <version>`. Вместо *version* указываем ту версию, которая использовалась при разработке проекта.  
-Чтобы ее узнать, необходимо ввести в терминале своего ПК `node -v`.  
-`nvm use <version>`. Вместо *version* указать ту же версию, что и на предыдущем шаге.  
-`node -v`. Должна появиться используемая версия.  
-Осталось установить пакеты, используемые в проекте:
+Write `nvm` to check if the loading was correct.  
+If there are any errors, copy the command [from this repository][4].  
+`nvm install <version>`. Instead of *version* specify those version you use in the project.  
+To find it out you need to enter `node -v` in your PC terminal.  
+`nvm use <version>`. Instaed of *version* specify those version you use in the project.  
+`node -v`.  
+It's time to install packages, used in the project:
 `npm i`.  
-Запускаем бота:  
+Start the bot:  
 `npm run start`.  
-Если через несколько секунд появляется ошибка ` {"code":"ETELEGRAM","message":"ETELEGRAM: 409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running"}`, значит, ваш бот уже работает. Просто нажмите Ctrl + C.  
-После чего заходим в профиль, находим *Recent Projects* и кликаем на проект.  
-Появится окошко с надписью *Started*. Пока оно активно, бот работает. В противном случае он отключится через 5 мин. Подробнее можно прочитать [здесь][3].  
+If you see ` {"code":"ETELEGRAM","message":"ETELEGRAM: 409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running"}`, it means that your bot has been started. Press Ctrl + C.  
+That's all!  
+[Uptime, Container Space, Request Rate][3].  
 
-## Может быть полезно
+## Can be useful
 * [nvm-sh/nvm][4]  
 * [Telegram bot on JavaScript with free hosting][5]  
 * [Deploying a GitHub app to Glitch][6]
