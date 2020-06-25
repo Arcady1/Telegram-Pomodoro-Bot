@@ -5,10 +5,10 @@ This bot let you work more effective. It reminds you when it's time to work and 
 For example, if it's 9:00 and you send two numbers to the bot 50 and 10 (minutes) it will write you at 9:50, 10:00, 10:50, 11:00, and so on.  
 
 ## Deploy on [Glitch][2]
-1. Регистрируемся на сайте (есть возможность авторизоваться с помощью GitHub).
-2. Создаем новый проект *NewProject*.
-3. Нажимаем *Import from GitHub* и указываем путь к репозиторию.
-4. После чего следует удалить из проекта пути к модулям, которые не были залиты на GitHub (если таковые имеются). Также рекомендую перенести в *.env* TOKEN вашего бота, чтобы никто не мог его увидеть, а в самом коде прописать `const token = process.env.TOKEN;`, где token - переменная, котрую вы используете, а TOKEN - имя переменной из *.env*.  
+1. Sign in / sign up.
+2. Create a *NewProject*.
+3. *Import from GitHub* and paste the path to your repository.
+4. Then you should remove unused modules paths to exclude errors. I recommend adding the telegram bot token to *.env* and name it TOKEN, for example. And use `const token = process.env.TOKEN;` to create token.  
   
 Если после проделанной работы справа от вкладки *Tools* (левый нижний угол) написанно *Error*, читайте далее, в противном случае - поздравляю, сервер заработал!
 ***
