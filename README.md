@@ -1,11 +1,10 @@
 # [Telegram Pomodoro Bot][1]
 
-## Описание (this guide will soon be translated in English)
-Данный бот позволяет работать эффективнее, напоминая, когда пришло время поработать, а когда - отдохнуть.  
-Представим, что сейчас 9:00. Вы отправляете боту два числа, например: 50 10, где 50 - время, выделенное на работу (в минутах), 10 - на отдых. 
-Тогда бот напишет в 9:50 и 10:00; 10:50 и 11:00 и т.д.
+## Description
+This bot let you work more effective. It reminds you when it's time to work and relax.  
+For example, if it's 9:00 and you send two numbers to the bot 50 and 10 (minutes) it will write you at 9:50, 10:00, 10:50, 11:00, and so on.  
 
-## Деплой Telegram бота на [Glitch][2]
+## Deploy on [Glitch][2]
 1. Регистрируемся на сайте (есть возможность авторизоваться с помощью GitHub).
 2. Создаем новый проект *NewProject*.
 3. Нажимаем *Import from GitHub* и указываем путь к репозиторию.
