@@ -9,8 +9,10 @@ For example, if it's 9:00 and you send two numbers to the bot 50 and 10 (minutes
 2. Create a *NewProject*.
 3. *Import from GitHub* and paste the path to your repository.
 4. Then you should remove unused modules paths to exclude errors. I recommend adding the telegram bot token to *.env* and name it TOKEN, for example. And use `const token = process.env.TOKEN;` to create token.  
-  
-Если после проделанной работы справа от вкладки *Tools* (левый нижний угол) написанно *Error*, читайте далее, в противном случае - поздравляю, сервер заработал!
+
+
+If you don't see any errors in *Tools*, my congratulations!  
+Otherwise continue reading.
 ***
 
 В левом нижнем углу нажимаем *Tools*, *Terminal* и пишем следующие команды:  
