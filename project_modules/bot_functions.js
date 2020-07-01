@@ -86,8 +86,6 @@ function minuteFormat(minute) {
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime() {
-    console.log(JSON.stringify(infoObject, null, 4));
-    
     let pastMin = parseInt((currentDate - infoObject.startDate) / 1000 / 60); // прошедшее время (мин) 
     infoObject.pastMin = pastMin;
     // если пришло время, присылать уведомление
@@ -121,10 +119,15 @@ function setNewTime(newTime) {
     currentDate = newTime;
 }
 
+function resetTimeToWork() {
+    timeToWork = true;
+}
+
 module.exports = {
     'timeLeft': timeLeft,
     'countdown': countdown,
     'clrTimeout': clrTimeout,
     'notePreparing': notePreparing,
-    'setNewTime': setNewTime
+    'setNewTime': setNewTime,
+    'resetTimeToWork': resetTimeToWork
 }

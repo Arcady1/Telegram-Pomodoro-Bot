@@ -19,6 +19,7 @@ bot.on('message', msg => {
 
   switch (msg.text) {
     case '/start':
+      botFunctions.resetTimeToWork();
       // появление клавиатуры
       bot.sendMessage(userId, ('Hello, ' + msg.from.first_name + '!\n' + messages.botAnswers('firstStart')), {
         reply_markup: {
@@ -39,6 +40,7 @@ bot.on('message', msg => {
       });
       break;
     case 'WRONG TIME':
+      botFunctions.resetTimeToWork();
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -50,6 +52,7 @@ bot.on('message', msg => {
       });
       break;
     case 'STOP':
+      botFunctions.resetTimeToWork();
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -92,6 +95,7 @@ bot.on('message', msg => {
 
 // интервал работы - отдыха или новое время
 bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
+  botFunctions.resetTimeToWork();
   let promise = new Promise((resolve, reject) => {
     // если указан интервал
     if (/([1-9]\d{0,3})( )([1-9]\d{0,3})/.test(match[0])) {
