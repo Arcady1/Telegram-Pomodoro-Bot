@@ -32,14 +32,14 @@ function notePreparing(msg, match) {
     return retNote;
 }
 
+let timeToWork = true;
+
 // отсчет времени при передаче боту двух чисел 
 function countdown(bot_, note, timeFromPause = false) {
     bot = bot_;
     let startDate = new Date(); // начальная дата
     let endDate = new Date(); // дата уведомления
-    let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)
-    let timeToWork = true;
-
+    let currentPlus; // текущее надбавка к дате (зависит от того, работал ты или отдыхал)  
     let promise = new Promise((resolve, reject) => {
         startDate.setHours(currentDate.getHours());
         // значение по умолчанию - длительность рабочего цикла
@@ -86,6 +86,8 @@ function minuteFormat(minute) {
 
 // ф-ия проверяет каждую секунду, не пора ли присылать уведомление
 function checkCurTime() {
+    console.log(JSON.stringify(infoObject, null, 4));
+    
     let pastMin = parseInt((currentDate - infoObject.startDate) / 1000 / 60); // прошедшее время (мин) 
     infoObject.pastMin = pastMin;
     // если пришло время, присылать уведомление
@@ -93,10 +95,12 @@ function checkCurTime() {
         let word;
 
         if (infoObject.timeToWork == true) {
+            timeToWork = false;
             infoObject.timeToWork = false;
             infoObject.currentPlus = infoObject.note.relaxTime;
             word = 'relax';
         } else {
+            timeToWork = true;
             infoObject.timeToWork = true;
             infoObject.currentPlus = infoObject.note.workTime;
             word = 'work';
