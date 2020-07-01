@@ -2,9 +2,10 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const myKeyboard = require('./project_modules/keyboard'); // модуль с клавиатурой 
 const messages = require('./project_modules/messages'); // модуль с уведомлениями 
+const config = require('./project_modules/config'); // модуль с конфигурацией проекта 
 const botFunctions = require('./project_modules/bot_functions'); // модуль с функциями и методами бота 
 
-const token = process.env.TOKEN; // TOKEN бота
+const token = config.TOKEN; // TOKEN бота
 const bot = new TelegramBot(token, {
   polling: true
 });
@@ -18,6 +19,7 @@ bot.on('message', msg => {
 
   switch (msg.text) {
     case '/start':
+      botFunctions.resetTimeToWork();
       // появление клавиатуры
       bot.sendMessage(userId, ('Hello, ' + msg.from.first_name + '!\n' + messages.botAnswers('firstStart')), {
         reply_markup: {
@@ -38,6 +40,7 @@ bot.on('message', msg => {
       });
       break;
     case 'WRONG TIME':
+      botFunctions.resetTimeToWork();
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -49,6 +52,7 @@ bot.on('message', msg => {
       });
       break;
     case 'STOP':
+      botFunctions.resetTimeToWork();
       // сброс таймера
       botFunctions.clrTimeout();
       // появление клавиатуры
@@ -91,6 +95,7 @@ bot.on('message', msg => {
 
 // интервал работы - отдыха или новое время
 bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
+  botFunctions.resetTimeToWork();
   let promise = new Promise((resolve, reject) => {
     // если указан интервал
     if (/([1-9]\d{0,3})( )([1-9]\d{0,3})/.test(match[0])) {
