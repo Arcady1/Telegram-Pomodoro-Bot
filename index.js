@@ -2,9 +2,10 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const myKeyboard = require('./project_modules/keyboard'); // модуль с клавиатурой 
 const messages = require('./project_modules/messages'); // модуль с уведомлениями 
+const config = require('./project_modules/config'); // модуль с конфигурациями проекта
 const botFunctions = require('./project_modules/bot_functions'); // модуль с функциями и методами бота 
 
-const token = process.env.TOKEN; // TOKEN бота
+const token = config.TOKEN; // TOKEN бота
 const bot = new TelegramBot(token, {
   polling: true
 });
