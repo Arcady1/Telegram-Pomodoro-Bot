@@ -3,6 +3,8 @@
 ## Description
 This bot let you work more effective. It reminds you when it's time to work and relax.  
 For example, if it's 9:00 and you send two numbers to the bot 50 and 10 (minutes) it will write you at 9:50, 10:00, 10:50, 11:00, and so on.  
+
+
 ![pomodoro-gif](https://github.com/Arcady1/Telegram-Pomodoro-Bot/raw/master/src/pomodoro-bot.gif)
 
 ## Deploy on [Glitch][2]
