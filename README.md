@@ -34,8 +34,6 @@ It's time to install packages, used in the project:
 Start the bot:  
 `npm run start`.  
 If you see ` {"code":"ETELEGRAM","message":"ETELEGRAM: 409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running"}`, it means that your bot has been started. Press Ctrl + C.  
-That's all!  
-[Uptime, Container Space, Request Rate][3].  
 
 ## Can be useful
 * [nvm-sh/nvm][4]  
@@ -46,7 +44,6 @@ That's all!
 
 [1]: https://t.me/pomodoro_25and5_bot                                                     "bot"
 [2]: https://glitch.com/                                                                  "Glitch"
-[3]: https://glitch.com/help/restrictions/                                                "timing-Glitch"
 [4]: https://github.com/nvm-sh/nvm                                                        "nvm"
 [5]: https://medium.com/roomjs/telegram-bot-on-javascript-with-free-hosting-53ae01bce991  "medium"
 [6]: https://andrewlock.net/creating-my-first-github-app-with-probot-part-3-deploying-to-glitch/
