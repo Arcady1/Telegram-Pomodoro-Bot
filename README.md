@@ -1,4 +1,4 @@
-# [Telegram Pomodoro Bot][1] 
+# [Telegram Pomodoro Bot][1]
 
 ## Description
 This bot let you work more effective. It reminds you when it's time to work and relax.  
