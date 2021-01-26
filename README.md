@@ -23,9 +23,11 @@ Open the terminal in *Tools*, *Terminal* and write:
 `apt-get install git -su`.  
 `git`. There must be no mistake.  
 `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash`.  
-The next command is quite large:  
-`export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"`.  
+The next command is quite large: 
+```
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
+```
 Write `nvm` to check if the loading was correct.  
 If there are any errors, copy the command [from this repository][4].  
 `nvm install <version>`. Instead of *version* specify those version you use in the project.  
