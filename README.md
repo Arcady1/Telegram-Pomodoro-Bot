@@ -1,8 +1,7 @@
 <h1 align="center">
   <a href="https://t.me/pomodoro_25and5_bot">Telegram Pomodoro Bot</a>
-  <br><br>
   <a href="https://t.me/pomodoro_25and5_bot">
-    <img src="" alt="" width="100%"></img>
+    <img src="https://github.com/Arcady1/Telegram-Pomodoro-Bot/blob/master/src/pomodoro_logo.jpg" alt="" width="100%"></img>
   </a>
 </h1>
 
