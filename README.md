@@ -1,10 +1,9 @@
 <h1 align="center">
-  <a href="https://t.me/pomodoro_25and5_bot">
-    <img src="###logo" alt="" width="500px"></img>
-  </a>
-  <br>
   <a href="https://t.me/pomodoro_25and5_bot">Telegram Pomodoro Bot</a>
-  <br>
+  <br><br>
+  <a href="https://t.me/pomodoro_25and5_bot">
+    <img src="" alt="" width="100%"></img>
+  </a>
 </h1>
 
 This bot let you work more effective. It reminds you when it's time to work and relax.
