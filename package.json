@@ -4,13 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node js/index.js"
   },
-  "engines": {
-    "node": "8.10.0"
-  },
-  "author": "",
-  "license": "ISC",
+  "author": "Arkady Gusarov",
+  "license": "MIT",
   "dependencies": {
     "node-telegram-bot-api": "^0.50.0"
   }

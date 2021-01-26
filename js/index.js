@@ -1,26 +1,28 @@
 process.env.NTBA_FIX_319 = 1;
-const TelegramBot = require('node-telegram-bot-api');
-const myKeyboard = require('./project_modules/keyboard'); // модуль с клавиатурой 
-const messages = require('./project_modules/messages'); // модуль с уведомлениями 
-const config = require('./project_modules/config'); // модуль с конфигурациями проекта
-const botFunctions = require('./project_modules/bot_functions'); // модуль с функциями и методами бота 
 
-const token = config.TOKEN; // TOKEN бота
+const TelegramBot = require('node-telegram-bot-api');
+const myKeyboard = require('./keyboard');
+const messages = require('./messages');
+const config = require('./config');
+const botFunctions = require('./bot_functions');
+
+const token = config.TOKEN;
 const bot = new TelegramBot(token, {
   polling: true
 });
-messages.setBot(bot); // добавляем bot в модуль messages, чтобы оттуда отправлять сообщения
-let note = {}; // объект, содержащий данные, которые передадутся в ф-ию ожидания отправки уведомления 
-let currentDate = new Date(); // текущее время
+messages.setBot(bot); // Add a bot to the messages module to send messages from there
+
+let note = {}; // The object containing the data that will be sent to the notification waiting function 
+let currentDate = new Date();
 
 bot.on('message', msg => {
-  let userId = msg.from.id; // id отправителя сообщения 
-  messages.setUserID(userId); // добавляем userId в модуль messages, чтобы оттуда отправлять сообщения
+  let userId = msg.from.id; // Message sender id 
+  messages.setUserID(userId); // Add userId to the messages module to send messages from there
 
   switch (msg.text) {
     case '/start':
       botFunctions.resetTimeToWork();
-      // появление клавиатуры
+      // Keyboard appearance
       bot.sendMessage(userId, ('Hello, ' + msg.from.first_name + '!\n' + messages.botAnswers('firstStart')), {
         reply_markup: {
           resize_keyboard: true,
@@ -29,9 +31,8 @@ bot.on('message', msg => {
       });
       break;
     case 'START':
-      // сброс таймера
       botFunctions.clrTimeout();
-      // появление клавиатуры
+      // Keyboard appearance
       bot.sendMessage(userId, messages.botAnswers('butStart'), {
         reply_markup: {
           resize_keyboard: true,
@@ -39,23 +40,10 @@ bot.on('message', msg => {
         }
       });
       break;
-    case 'WRONG TIME':
-      botFunctions.resetTimeToWork();
-      // сброс таймера
-      botFunctions.clrTimeout();
-      // появление клавиатуры
-      bot.sendMessage(userId, 'What\'s time is it (for example 15:30)?', {
-        reply_markup: {
-          resize_keyboard: true,
-          keyboard: myKeyboard.stopOnlyKb
-        }
-      });
-      break;
     case 'STOP':
       botFunctions.resetTimeToWork();
-      // сброс таймера
       botFunctions.clrTimeout();
-      // появление клавиатуры
+      // Keyboard appearance
       bot.sendMessage(userId, messages.botAnswers('butStop'), {
         reply_markup: {
           resize_keyboard: true,
@@ -64,9 +52,8 @@ bot.on('message', msg => {
       });
       break;
     case 'PAUSE':
-      // сброс таймера
       botFunctions.clrTimeout();
-      // появление кнопки RESUME
+      // RESUME button appears
       bot.sendMessage(userId, messages.botAnswers('butPause'), {
         reply_markup: {
           resize_keyboard: true,
@@ -75,8 +62,8 @@ bot.on('message', msg => {
       });
       break;
     case 'RESUME':
-      // появление кнопки PAUSE
-      bot.sendMessage(userId, 'I\'m working again', {
+      // PAUSE button appears
+      bot.sendMessage(userId, messages.botAnswers('butPause'), {
         reply_markup: {
           resize_keyboard: true,
           keyboard: myKeyboard.stopKb
@@ -93,16 +80,16 @@ bot.on('message', msg => {
   }
 })
 
-// интервал работы - отдыха или новое время
+// Work or rest interval or new time
 bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
   botFunctions.resetTimeToWork();
   let promise = new Promise((resolve, reject) => {
-    // если указан интервал
+    // If an interval is specified
     if (/([1-9]\d{0,3})( )([1-9]\d{0,3})/.test(match[0])) {
       note = botFunctions.notePreparing(msg, match);
       resolve();
     }
-    // если указано новое время
+    // If a new time is specified
     else {
       let res = match[0].split(':');
       note.startHours = res[0];
@@ -112,7 +99,7 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
     }
   });
   promise.then(() => {
-    // отсчет времени до уведомления
+    // Countdown to notification
     botFunctions.countdown(bot, note);
   });
   promise.catch(error => {
@@ -120,14 +107,14 @@ bot.onText(/(\d{1,4})( |:)(\d{1,4})/, (msg, match) => {
   });
 })
 
-// каждую секунду обновляем время
+// Updating the time every second
 setInterval(() => {
   console.log("Main: " + currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds());
   currentDate.setSeconds(currentDate.getSeconds() + 1);
   botFunctions.setNewTime(currentDate);
 }, 1000);
 
-// каждые 20 секунд синхронизируем время
+// Time synchronization every 20s
 setInterval(() => {
   let updateHours = currentDate.getHours();
   currentDate = new Date();
