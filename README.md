@@ -7,7 +7,6 @@
   <br>
 </h1>
 
-## Description
 This bot let you work more effective. It reminds you when it's time to work and relax.
 
 ![pomodoro-gif](https://github.com/Arcady1/Telegram-Pomodoro-Bot/blob/master/src/pomodoro_bot.gif)
@@ -28,9 +27,6 @@ This application uses the following open source packages:
 
 ### License
 MIT
-
-## Can be useful
-
 
 [1]: https://t.me/pomodoro_25and5_bot
 [2]: https://www.npmjs.com/package/node-telegram-bot-api
