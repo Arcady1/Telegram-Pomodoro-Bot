@@ -6,7 +6,7 @@
   </a>
 </h1>
 
-This bot let you work more effective. It reminds you when it's time to work and relax.
+This bot allows you to work more efficiently. It reminds you when it's time to work and relax.
 
 ![pomodoro-gif](https://github.com/Arcady1/Telegram-Pomodoro-Bot/blob/master/src/pomodoro_bot.gif)
 
