@@ -10,6 +10,24 @@ This bot let you work more effective. It reminds you when it's time to work and 
 
 ![pomodoro-gif](https://github.com/Arcady1/Telegram-Pomodoro-Bot/blob/master/src/pomodoro_bot.gif)
 
+### How to use
+
+To clone and run this application, you'll need Git. From your command line:
+
+```
+# Clone this repository
+$ git clone https://github.com/Arcady1/Telegram-Pomodoro-Bot.git
+
+# Go into the repository
+$ cd Telegram-Pomodoro-Bot
+
+# Install dependencies
+$ npm install
+
+# Start the bot
+$ npm start
+```
+
 ### Credits
 This application uses the following open source packages:
 
