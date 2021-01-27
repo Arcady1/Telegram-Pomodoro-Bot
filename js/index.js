@@ -63,7 +63,7 @@ bot.on('message', msg => {
       break;
     case 'RESUME':
       // PAUSE button appears
-      bot.sendMessage(userId, messages.botAnswers('butPause'), {
+      bot.sendMessage(userId, messages.botAnswers('butResume'), {
         reply_markup: {
           resize_keyboard: true,
           keyboard: myKeyboard.stopKb
