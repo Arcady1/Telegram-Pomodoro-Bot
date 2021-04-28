@@ -2,7 +2,7 @@
   "name": "pomodoro_25and5_bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "js/index.js",
   "scripts": {
     "start": "node js/index.js"
   },
