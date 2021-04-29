@@ -3,10 +3,9 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
 const myKeyboard = require('./keyboard');
 const messages = require('./messages');
-const config = require('./config');
 const botFunctions = require('./bot_functions');
 
-const token = config.TOKEN;
+const token = process.env.TOKEN;
 const bot = new TelegramBot(token, {
   polling: true
 });
