@@ -4,11 +4,13 @@
   "description": "",
   "main": "js/index.js",
   "scripts": {
-    "start": "node js/index.js"
+    "start": "node js/index.js",
+    "deploy": "git add . && git commit -am 'deploy' && git push origin master && git push heroku master"
   },
   "author": "Arkady Gusarov",
   "license": "MIT",
   "dependencies": {
+    "express": "^4.17.1",
     "node-telegram-bot-api": "^0.50.0"
   }
 }
