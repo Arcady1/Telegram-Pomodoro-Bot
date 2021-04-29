@@ -5,7 +5,7 @@ const myKeyboard = require('./keyboard');
 const messages = require('./messages');
 const botFunctions = require('./bot_functions');
 
-const token = process.env.TOKEN;
+const token = "1285030711:AAFbub1eWAPZQDWBp2xg7hfpWtcUU1sFgHM";
 const bot = new TelegramBot(token, {
     polling: true
 });
